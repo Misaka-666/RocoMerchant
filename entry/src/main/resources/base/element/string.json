@@ -15,6 +15,10 @@
     {
       "name": "permission_internet_reason",
       "value": "用于获取游戏商人商品数据"
+    },
+    {
+      "name": "permission_reminder_reason",
+      "value": "用于在商品刷新时发送提醒通知"
     }
   ]
 }

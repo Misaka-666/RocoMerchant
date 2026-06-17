@@ -9,7 +9,7 @@ const DOMAIN = 0x0000;
 struct Index {
   controller: webview.WebviewController = new webview.WebviewController();
   jsBridge: JsBridge = new JsBridge();
-  methodList: string[] = ['getApiKey', 'openSettings', 'fetchApi'];
+  methodList: string[] = ['getApiKey', 'openSettings', 'fetchApi', 'enableNotification', 'disableNotification', 'getNotificationStatus'];
 
   aboutToAppear(): void {
     this.jsBridge.setController(this.controller);

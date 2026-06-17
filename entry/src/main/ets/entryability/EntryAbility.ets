@@ -2,6 +2,8 @@ import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.Ab
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { StorageUtil } from '../util/StorageUtil';
+import { NotificationUtil } from '../util/NotificationUtil';
+import { ReminderService } from '../service/ReminderService';
 
 const DOMAIN = 0x0000;
 
@@ -38,9 +40,22 @@ export default class EntryAbility extends UIAbility {
 
   onForeground(): void {
     hilog.info(DOMAIN, 'EntryAbility', '%{public}s', 'Ability onForeground');
+    this.initNotification();
   }
 
   onBackground(): void {
     hilog.info(DOMAIN, 'EntryAbility', '%{public}s', 'Ability onBackground');
+  }
+
+  private async initNotification(): Promise<void> {
+    hilog.info(DOMAIN, 'EntryAbility', 'Initializing notification');
+
+    const enabled = await NotificationUtil.requestPermission(this.context);
+    if (enabled) {
+      await ReminderService.setupRoundReminders();
+      hilog.info(DOMAIN, 'EntryAbility', 'Notification initialized successfully');
+    } else {
+      hilog.warn(DOMAIN, 'EntryAbility', 'Notification permission not granted');
+    }
   }
 }

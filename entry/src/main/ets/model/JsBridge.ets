@@ -3,6 +3,8 @@ import { http } from '@kit.NetworkKit';
 import { router } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { StorageUtil } from '../util/StorageUtil';
+import { NotificationUtil } from '../util/NotificationUtil';
+import { ReminderService } from '../service/ReminderService';
 
 const DOMAIN = 0x0000;
 const TAG = 'JsBridge';
@@ -72,6 +74,42 @@ export class JsBridge {
         error: (error as Error).message || 'Unknown error'
       };
       this.callbackJs(requestId, JSON.stringify(errorResult));
+    }
+  }
+
+  async enableNotification(): Promise<boolean> {
+    hilog.info(DOMAIN, TAG, 'enableNotification called');
+    try {
+      await ReminderService.setupRoundReminders();
+      hilog.info(DOMAIN, TAG, 'Notification enabled');
+      return true;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, 'enableNotification error: %{public}s', JSON.stringify(error));
+      return false;
+    }
+  }
+
+  async disableNotification(): Promise<boolean> {
+    hilog.info(DOMAIN, TAG, 'disableNotification called');
+    try {
+      await ReminderService.cancelAllReminders();
+      await NotificationUtil.cancelAllNotifications();
+      hilog.info(DOMAIN, TAG, 'Notification disabled');
+      return true;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, 'disableNotification error: %{public}s', JSON.stringify(error));
+      return false;
+    }
+  }
+
+  async getNotificationStatus(): Promise<boolean> {
+    hilog.info(DOMAIN, TAG, 'getNotificationStatus called');
+    try {
+      const count = await ReminderService.getValidReminders();
+      return count > 0;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, 'getNotificationStatus error: %{public}s', JSON.stringify(error));
+      return false;
     }
   }
 
