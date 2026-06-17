@@ -9,6 +9,7 @@ const DOMAIN = 0x0000;
 struct Index {
   controller: webview.WebviewController = new webview.WebviewController();
   jsBridge: JsBridge = new JsBridge();
+  methodList: string[] = ['getApiKey', 'openSettings', 'fetchApi'];
 
   aboutToAppear(): void {
     this.jsBridge.setController(this.controller);
@@ -22,16 +23,14 @@ struct Index {
         .javaScriptAccess(true)
         .domStorageAccess(true)
         .mixedMode(MixedMode.All)
-        .onPageBegin(() => {
-          hilog.info(DOMAIN, 'Index', 'Page begin loading, registering JS bridge');
-          this.controller.registerJavaScriptProxy(
-            this.jsBridge,
-            'AndroidBridge',
-            ['getApiKey', 'openSettings', 'fetchApi']
-          );
+        .javaScriptProxy({
+          object: this.jsBridge,
+          name: 'AndroidBridge',
+          methodList: this.methodList,
+          controller: this.controller
         })
         .onPageEnd(() => {
-          hilog.info(DOMAIN, 'Index', 'Page loaded');
+          hilog.info(DOMAIN, 'Index', 'Page loaded successfully');
         })
     }
     .width('100%')
