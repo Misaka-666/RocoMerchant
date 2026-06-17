@@ -25,6 +25,8 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage): void {
     hilog.info(DOMAIN, 'EntryAbility', '%{public}s', 'Ability onWindowStageCreate');
 
+    this.setImmersiveMode(windowStage);
+
     windowStage.loadContent('pages/Index', (err) => {
       if (err.code) {
         hilog.error(DOMAIN, 'EntryAbility', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
@@ -45,6 +47,28 @@ export default class EntryAbility extends UIAbility {
 
   onBackground(): void {
     hilog.info(DOMAIN, 'EntryAbility', '%{public}s', 'Ability onBackground');
+  }
+
+  private setImmersiveMode(windowStage: window.WindowStage): void {
+    try {
+      const windowClass: window.Window = windowStage.getMainWindowSync();
+
+      windowClass.setWindowLayoutFullScreen(true);
+
+      windowClass.setWindowSystemBarProperties({
+        statusBarColor: '#00000000',
+        navigationBarColor: '#00000000',
+        statusBarContentColor: '#000000',
+        navigationBarContentColor: '#000000'
+      });
+
+      AppStorage.setOrCreate('statusBarHeight', 0);
+      AppStorage.setOrCreate('navigationBarHeight', 0);
+
+      hilog.info(DOMAIN, 'EntryAbility', 'Immersive mode set successfully');
+    } catch (err) {
+      hilog.error(DOMAIN, 'EntryAbility', 'Failed to set immersive mode: %{public}s', JSON.stringify(err));
+    }
   }
 
   private async initNotification(): Promise<void> {
