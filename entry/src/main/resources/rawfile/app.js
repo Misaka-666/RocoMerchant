@@ -28,9 +28,12 @@ function _nativeCallback(requestId, responseStr) {
     }
 }
 
-function getApiKey() {
+async function getApiKey() {
     try {
-        if (window.AndroidBridge) return window.AndroidBridge.getApiKey();
+        if (window.AndroidBridge) {
+            const key = await window.AndroidBridge.getApiKey();
+            return key || "";
+        }
     } catch (e) { log("getApiKey bridge error: " + e); }
     return localStorage.getItem("api_key") || "";
 }
@@ -303,7 +306,7 @@ function requestAPI(apiKey) {
 }
 
 async function loadData() {
-    const apiKey = getApiKey();
+    const apiKey = await getApiKey();
     log("loadData called, key=" + (apiKey ? ("len=" + apiKey.length) : "empty"));
     if (!apiKey) {
         showState("no-key-state");
@@ -342,8 +345,8 @@ async function loadData() {
     }
 }
 
-function onSettingsChanged() {
-    const key = getApiKey();
+async function onSettingsChanged() {
+    const key = await getApiKey();
     if (key) loadData();
 }
 
