@@ -21,18 +21,29 @@ export class JsBridge {
   }
 
   async getApiKey(): Promise<string> {
+    hilog.info(DOMAIN, TAG, 'getApiKey called');
     const key = await StorageUtil.getApiKey();
-    hilog.info(DOMAIN, TAG, 'getApiKey called, key length: %{public}d', key.length);
+    hilog.info(DOMAIN, TAG, 'getApiKey result, key length: %{public}d', key.length);
     return key;
   }
 
   openSettings(): void {
     hilog.info(DOMAIN, TAG, 'openSettings called');
-    router.pushUrl({ url: 'pages/Settings' });
+    try {
+      router.pushUrl({ url: 'pages/Settings' }, router.RouterMode.Standard, (err) => {
+        if (err) {
+          hilog.error(DOMAIN, TAG, 'pushUrl failed: %{public}s', JSON.stringify(err));
+        } else {
+          hilog.info(DOMAIN, TAG, 'pushUrl success');
+        }
+      });
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, 'openSettings error: %{public}s', JSON.stringify(error));
+    }
   }
 
   async fetchApi(requestId: string, url: string, apiKey: string): Promise<void> {
-    hilog.info(DOMAIN, TAG, 'fetchApi called, requestId: %{public}s, url: %{public}s', requestId, url);
+    hilog.info(DOMAIN, TAG, 'fetchApi called, requestId: %{public}s', requestId);
     try {
       const httpRequest = http.createHttp();
       const response = await httpRequest.request(url, {

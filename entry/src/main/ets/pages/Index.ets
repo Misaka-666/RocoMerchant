@@ -22,13 +22,16 @@ struct Index {
         .javaScriptAccess(true)
         .domStorageAccess(true)
         .mixedMode(MixedMode.All)
-        .onPageEnd(() => {
-          hilog.info(DOMAIN, 'Index', 'Page loaded, registering JS bridge');
+        .onPageBegin(() => {
+          hilog.info(DOMAIN, 'Index', 'Page begin loading, registering JS bridge');
           this.controller.registerJavaScriptProxy(
             this.jsBridge,
             'AndroidBridge',
             ['getApiKey', 'openSettings', 'fetchApi']
           );
+        })
+        .onPageEnd(() => {
+          hilog.info(DOMAIN, 'Index', 'Page loaded');
         })
     }
     .width('100%')
