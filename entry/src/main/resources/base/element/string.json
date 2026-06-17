@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "洛克商人助手"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "洛克商人助手"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "洛克商人助手"
+    },
+    {
+      "name": "permission_internet_reason",
+      "value": "用于获取游戏商人商品数据"
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>远行商人</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="merchant-page">
+        <div class="background"></div>
+        <div class="content-container">
+
+            <div class="header">
+                <div class="title-section">
+                    <div class="title-main">
+                        <div class="title-badge"><img src="img/title-icon.png" onerror="this.style.display='none'" alt=""></div>
+                        <div class="title-text">远行商人</div>
+                    </div>
+                    <div class="subtitle" id="subtitle">每日 08:00 / 12:00 / 16:00 / 20:00 刷新</div>
+                </div>
+                <div class="header-side">
+                    <div class="summary-chip">在售商品 <strong id="product-count">-</strong></div>
+                    <div class="round-info">
+                        <div class="round-pill" id="round-pill">第 - / 4 轮</div>
+                        <div class="countdown-pill" id="countdown-pill">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="loading" class="loading-state">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">加载中...</div>
+            </div>
+
+            <div id="error-state" class="error-state" style="display:none">
+                <div class="error-icon">!</div>
+                <div class="error-text" id="error-text"></div>
+                <button class="btn-retry" onclick="loadData()">重试</button>
+            </div>
+
+            <div id="no-key-state" class="error-state" style="display:none">
+                <div class="error-icon">?</div>
+                <div class="error-text">请先设置 API Key</div>
+                <button class="btn-retry" onclick="openSettings()">前往设置</button>
+            </div>
+
+            <div class="products-grid" id="products-container" style="display:none"></div>
+
+            <div id="history-section" style="display:none">
+                <div class="history-title">今日历史商品</div>
+                <div id="history-container"></div>
+            </div>
+
+            <button class="btn-refresh" id="btn-refresh" onclick="loadData()" style="display:none">&#x21bb; 刷新</button>
+
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
