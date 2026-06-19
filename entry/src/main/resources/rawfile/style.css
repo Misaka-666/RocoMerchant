@@ -399,3 +399,23 @@ html, body {
     transform: scale(0.97);
     background: rgba(255,255,255,0.95);
 }
+
+.btn-egg {
+    display: block;
+    margin: 12px auto 0;
+    padding: 12px 32px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255,214,153,0.6), rgba(255,193,107,0.8));
+    color: var(--text-1);
+    font-size: 16px;
+    font-family: var(--font);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(58, 39, 21, 0.06);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-egg:active {
+    transform: scale(0.97);
+    background: rgba(255,214,153,0.9);
+}
