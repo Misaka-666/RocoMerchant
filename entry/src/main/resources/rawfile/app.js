@@ -280,10 +280,12 @@ if (document.readyState === "loading") {
 function switchTab(tab) {
     var merchantPage = document.getElementById("page-merchant");
     var eggPage = document.getElementById("page-egg");
+    var pokedexPage = document.getElementById("page-pokedex");
     var navItems = document.querySelectorAll(".nav-item");
 
     merchantPage.classList.remove("active");
     eggPage.classList.remove("active");
+    pokedexPage.classList.remove("active");
 
     for (var i = 0; i < navItems.length; i++) {
         navItems[i].classList.remove("active");
@@ -292,9 +294,13 @@ function switchTab(tab) {
     if (tab === "merchant") {
         merchantPage.classList.add("active");
         navItems[0].classList.add("active");
-    } else {
+    } else if (tab === "egg") {
         eggPage.classList.add("active");
         navItems[1].classList.add("active");
+    } else if (tab === "pokedex") {
+        pokedexPage.classList.add("active");
+        navItems[2].classList.add("active");
+        initPokedex();
     }
 }
 
@@ -478,3 +484,135 @@ function displayEggResults(results) {
 }
 
 loadEggDataNative();
+
+// 精灵图鉴功能
+var pokedexData = null;
+var pokedexInitialized = false;
+var selectedType = "";
+
+var TYPE_COLORS = {
+    "Normal": "#A8A878", "Grass": "#78C850", "Fire": "#F08030", "Water": "#6890F0",
+    "Light": "#F8D030", "Ground": "#E0C068", "Ice": "#98D8D8", "Dragon": "#7038F8",
+    "Electric": "#F8D030", "Poison": "#A040A0", "Bug": "#A8B820", "Fighting": "#C03028",
+    "Flying": "#A890F0", "Fairy": "#EE99AC", "Ghost": "#705898", "Dark": "#705848",
+    "Steel": "#B8B8D0", "Psychic": "#F85888"
+};
+
+var TYPE_NAMES = {
+    "Normal": "普通", "Grass": "草", "Fire": "火", "Water": "水",
+    "Light": "光", "Ground": "地", "Ice": "冰", "Dragon": "龙",
+    "Electric": "电", "Poison": "毒", "Bug": "虫", "Fighting": "武",
+    "Flying": "翼", "Fairy": "萌", "Ghost": "幽", "Dark": "恶",
+    "Steel": "机械", "Psychic": "幻"
+};
+
+function initPokedex() {
+    if (pokedexInitialized) return;
+    pokedexInitialized = true;
+
+    if (typeof POKEDEX_DATA !== 'undefined') {
+        pokedexData = POKEDEX_DATA;
+        log("Loaded " + pokedexData.length + " pokedex entries");
+        document.getElementById("pokedex-total").textContent = pokedexData.length;
+        renderTypeFilters();
+        renderPokedex(pokedexData);
+    }
+}
+
+function renderTypeFilters() {
+    var container = document.getElementById("type-filters");
+    var types = Object.keys(TYPE_COLORS);
+    var html = '<div class="type-btn" onclick="selectType(\"\")" id="type-all">全部</div>';
+
+    for (var i = 0; i < types.length; i++) {
+        var type = types[i];
+        html += '<div class="type-btn" id="type-' + type + '" onclick="selectType(\'' + type + '\')" ';
+        html += 'style="border-color:' + TYPE_COLORS[type] + '">' + TYPE_NAMES[type] + '</div>';
+    }
+
+    container.innerHTML = html;
+}
+
+function selectType(type) {
+    selectedType = type;
+
+    var allBtns = document.querySelectorAll(".type-btn");
+    for (var i = 0; i < allBtns.length; i++) {
+        allBtns[i].classList.remove("active");
+        allBtns[i].style.background = "";
+    }
+
+    if (type === "") {
+        document.getElementById("type-all").classList.add("active");
+        document.getElementById("type-all").style.background = "#a0631d";
+    } else {
+        var btn = document.getElementById("type-" + type);
+        if (btn) {
+            btn.classList.add("active");
+            btn.style.background = TYPE_COLORS[type];
+        }
+    }
+
+    filterPokedex();
+}
+
+function filterPokedex() {
+    if (!pokedexData) return;
+
+    var searchText = document.getElementById("pokedex-search-input").value.toLowerCase();
+    var sortBy = document.getElementById("pokedex-sort").value;
+
+    var filtered = pokedexData.filter(function(s) {
+        if (selectedType && s.type.indexOf(selectedType) === -1) return false;
+        if (searchText) {
+            var match = s.name.toLowerCase().indexOf(searchText) >= 0 ||
+                       s.nameEn.toLowerCase().indexOf(searchText) >= 0 ||
+                       s.no.toLowerCase().indexOf(searchText) >= 0;
+            if (!match) return false;
+        }
+        return true;
+    });
+
+    filtered.sort(function(a, b) {
+        if (sortBy === "no-asc") return a.no.localeCompare(b.no);
+        if (sortBy === "no-desc") return b.no.localeCompare(a.no);
+        if (sortBy === "total-desc") return b.total - a.total;
+        if (sortBy === "total-asc") return a.total - b.total;
+        if (sortBy === "name-asc") return a.name.localeCompare(b.name);
+        return 0;
+    });
+
+    renderPokedex(filtered);
+}
+
+function renderPokedex(data) {
+    var grid = document.getElementById("pokedex-grid");
+    var empty = document.getElementById("pokedex-empty");
+
+    if (data.length === 0) {
+        grid.style.display = "none";
+        empty.style.display = "block";
+        return;
+    }
+
+    empty.style.display = "none";
+    grid.style.display = "grid";
+
+    var html = "";
+    for (var i = 0; i < data.length; i++) {
+        var s = data[i];
+        var typeColor = TYPE_COLORS[s.type.split(" / ")[0]] || "#999";
+        var typeName = TYPE_NAMES[s.type.split(" / ")[0]] || s.type;
+
+        html += '<div class="pokedex-card">';
+        html += '  <div class="pokedex-card-no">' + escHtml(s.no) + '</div>';
+        html += '  <div class="pokedex-card-img"><img src="https://rocokingdomworld.org' + s.pic + '" onerror="this.parentElement.innerHTML=\'?\'" alt=""></div>';
+        html += '  <div class="pokedex-card-name">' + escHtml(s.name) + '</div>';
+        html += '  <div class="pokedex-card-name-en">' + escHtml(s.nameEn) + '</div>';
+        html += '  <div class="pokedex-card-type" style="background:' + typeColor + '">' + typeName + '</div>';
+        html += '  <div class="pokedex-card-stats">种族值: ' + s.total + '</div>';
+        html += '</div>';
+    }
+
+    grid.innerHTML = html;
+}
