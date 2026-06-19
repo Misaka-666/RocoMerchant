@@ -1,9 +1,6 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { StorageUtil } from '../util/StorageUtil';
-import { NotificationUtil } from '../util/NotificationUtil';
-import { ReminderService } from '../service/ReminderService';
 
 const DOMAIN = 0x0000;
 
@@ -14,7 +11,6 @@ export default class EntryAbility extends UIAbility {
     } catch (err) {
       hilog.error(DOMAIN, 'EntryAbility', 'Failed to set colorMode. Cause: %{public}s', JSON.stringify(err));
     }
-    StorageUtil.init(this.context);
     hilog.info(DOMAIN, 'EntryAbility', '%{public}s', 'Ability onCreate');
   }
 
@@ -42,7 +38,6 @@ export default class EntryAbility extends UIAbility {
 
   onForeground(): void {
     hilog.info(DOMAIN, 'EntryAbility', '%{public}s', 'Ability onForeground');
-    this.initNotification();
   }
 
   onBackground(): void {
@@ -68,18 +63,6 @@ export default class EntryAbility extends UIAbility {
       hilog.info(DOMAIN, 'EntryAbility', 'Immersive mode set successfully');
     } catch (err) {
       hilog.error(DOMAIN, 'EntryAbility', 'Failed to set immersive mode: %{public}s', JSON.stringify(err));
-    }
-  }
-
-  private async initNotification(): Promise<void> {
-    hilog.info(DOMAIN, 'EntryAbility', 'Initializing notification');
-
-    const enabled = await NotificationUtil.requestPermission(this.context);
-    if (enabled) {
-      await ReminderService.setupRoundReminders();
-      hilog.info(DOMAIN, 'EntryAbility', 'Notification initialized successfully');
-    } else {
-      hilog.warn(DOMAIN, 'EntryAbility', 'Notification permission not granted');
     }
   }
 }
