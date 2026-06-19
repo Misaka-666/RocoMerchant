@@ -784,14 +784,15 @@ function closePokedexDetail() {
     }
 }
 
-// 初始化返回按钮事件
-document.addEventListener('DOMContentLoaded', function() {
+// 绑定返回按钮事件 - 使用立即执行
+(function() {
     var backBtn = document.getElementById('btn-back-detail');
     if (backBtn) {
-        backBtn.addEventListener('click', function(e) {
+        backBtn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
             closePokedexDetail();
-        });
+            return false;
+        };
     }
-});
+})();
