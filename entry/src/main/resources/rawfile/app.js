@@ -644,8 +644,9 @@ function showPokedexDetail(index) {
 
     // 获取详情数据
     var detail = null;
-    if (typeof POKEDEX_DETAIL_DATA !== 'undefined' && POKEDEX_DETAIL_DATA[s.slug]) {
-        detail = POKEDEX_DETAIL_DATA[s.slug];
+    var slug = s.nameEn.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (typeof POKEDEX_DETAIL_DATA !== 'undefined' && POKEDEX_DETAIL_DATA[slug]) {
+        detail = POKEDEX_DETAIL_DATA[slug];
     }
 
     // 添加详情信息
