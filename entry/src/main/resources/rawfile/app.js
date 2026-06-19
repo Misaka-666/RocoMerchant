@@ -302,23 +302,11 @@ function switchTab(tab) {
 var eggData = null;
 
 function loadEggDataNative() {
-    log("Loading egg data");
-    if (window.AndroidBridge && window.AndroidBridge.loadEggData) {
-        var id = String(++_reqId);
-        _pending[id] = { resolve: function(data) {
-            eggData = data;
-            log("Loaded " + eggData.length + " egg size entries");
-        }, reject: function(err) {
-            log("Failed to load egg data: " + err.message);
-        }};
-        try {
-            window.AndroidBridge.loadEggData(id);
-        } catch (e) {
-            delete _pending[id];
-            log("Failed to call loadEggData: " + e.message);
-        }
+    if (typeof EGG_SIZES_DATA !== 'undefined') {
+        eggData = EGG_SIZES_DATA;
+        log("Loaded " + eggData.length + " egg size entries from embedded data");
     } else {
-        log("loadEggData not available");
+        log("EGG_SIZES_DATA not found");
     }
 }
 
