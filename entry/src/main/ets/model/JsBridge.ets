@@ -64,22 +64,23 @@ export class JsBridge {
     }
   }
 
-  async loadRawFile(fileName: string): Promise<string> {
-    hilog.info(DOMAIN, TAG, 'loadRawFile called, fileName: %{public}s', fileName);
+  async loadEggData(requestId: string): Promise<void> {
+    hilog.info(DOMAIN, TAG, 'loadEggData called, requestId: %{public}s', requestId);
     if (!this.context) {
       hilog.error(DOMAIN, TAG, 'Context not set');
-      return '[]';
+      this.callbackJs(requestId, '{"status":0,"error":"Context not set"}');
+      return;
     }
     try {
       const resourceMgr = this.context.resourceManager;
-      const rawData = await resourceMgr.getRawFileContent(fileName);
+      const rawData = await resourceMgr.getRawFileContent('egg-data.json');
       const decoder = new util.TextDecoder('utf-8');
       const content = decoder.decode(rawData);
-      hilog.info(DOMAIN, TAG, 'loadRawFile success, length: %{public}d', content.length);
-      return content;
+      hilog.info(DOMAIN, TAG, 'loadEggData success, length: %{public}d', content.length);
+      this.callbackJs(requestId, '{"status":200,"body":' + content + '}');
     } catch (error) {
-      hilog.error(DOMAIN, TAG, 'loadRawFile error: %{public}s', JSON.stringify(error));
-      return '[]';
+      hilog.error(DOMAIN, TAG, 'loadEggData error: %{public}s', JSON.stringify(error));
+      this.callbackJs(requestId, '{"status":0,"error":"' + JSON.stringify(error) + '"}');
     }
   }
 

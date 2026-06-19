@@ -301,19 +301,24 @@ function switchTab(tab) {
 // 孵蛋鉴定功能
 var eggData = null;
 
-function loadEggData() {
+function loadEggDataNative() {
     log("Loading egg data");
-    if (window.AndroidBridge && window.AndroidBridge.loadRawFile) {
+    if (window.AndroidBridge && window.AndroidBridge.loadEggData) {
+        var id = String(++_reqId);
+        _pending[id] = { resolve: function(data) {
+            eggData = data;
+            log("Loaded " + eggData.length + " egg size entries");
+        }, reject: function(err) {
+            log("Failed to load egg data: " + err.message);
+        }};
         try {
-            window.AndroidBridge.loadRawFile("egg-data.json").then(function(content) {
-                eggData = JSON.parse(content);
-                log("Loaded " + eggData.length + " egg size entries");
-            }).catch(function(err) {
-                log("Failed to load egg data: " + err);
-            });
+            window.AndroidBridge.loadEggData(id);
         } catch (e) {
-            log("Failed to load egg data: " + e.message);
+            delete _pending[id];
+            log("Failed to call loadEggData: " + e.message);
         }
+    } else {
+        log("loadEggData not available");
     }
 }
 
@@ -437,4 +442,4 @@ function displayEggResults(results) {
     resultList.innerHTML = html;
 }
 
-loadEggData();
+loadEggDataNative();

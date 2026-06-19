@@ -10,7 +10,7 @@ const DOMAIN = 0x0000;
 struct Index {
   controller: webview.WebviewController = new webview.WebviewController();
   jsBridge: JsBridge = new JsBridge();
-  methodList: string[] = ['fetchApi', 'loadRawFile'];
+  methodList: string[] = ['fetchApi', 'loadEggData'];
 
   aboutToAppear(): void {
     this.jsBridge.setController(this.controller);
