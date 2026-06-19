@@ -7,9 +7,14 @@ const TAG = 'JsBridge';
 
 export class JsBridge {
   private controller: webview.WebviewController | null = null;
+  private onDetailStateChange: ((isOpen: boolean) => void) | null = null;
 
   setController(controller: webview.WebviewController): void {
     this.controller = controller;
+  }
+
+  setOnDetailStateChange(callback: (isOpen: boolean) => void): void {
+    this.onDetailStateChange = callback;
   }
 
   async fetchApi(requestId: string, url: string, apiKey: string): Promise<void> {
@@ -41,6 +46,20 @@ export class JsBridge {
       hilog.error(DOMAIN, TAG, 'fetchApi error: %{public}s', JSON.stringify(error));
       const errorMsg = (error instanceof Error) ? error.message : 'Unknown error';
       this.callbackJs(requestId, '{"status":0,"error":"' + errorMsg.replace(/"/g, '\\"') + '"}');
+    }
+  }
+
+  notifyDetailOpen(): void {
+    hilog.info(DOMAIN, TAG, 'notifyDetailOpen called');
+    if (this.onDetailStateChange) {
+      this.onDetailStateChange(true);
+    }
+  }
+
+  notifyDetailClose(): void {
+    hilog.info(DOMAIN, TAG, 'notifyDetailClose called');
+    if (this.onDetailStateChange) {
+      this.onDetailStateChange(false);
     }
   }
 

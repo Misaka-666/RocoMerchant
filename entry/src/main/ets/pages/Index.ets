@@ -9,24 +9,24 @@ const DOMAIN = 0x0000;
 struct Index {
   controller: webview.WebviewController = new webview.WebviewController();
   jsBridge: JsBridge = new JsBridge();
-  methodList: string[] = ['fetchApi'];
+  methodList: string[] = ['fetchApi', 'notifyDetailOpen', 'notifyDetailClose'];
+  isDetailOpen: boolean = false;
 
   aboutToAppear(): void {
     this.jsBridge.setController(this.controller);
+    this.jsBridge.setOnDetailStateChange((isOpen: boolean) => {
+      this.isDetailOpen = isOpen;
+      hilog.info(DOMAIN, 'Index', 'Detail state changed: %{public}s', isOpen ? 'open' : 'closed');
+    });
   }
 
   onBackPress(): boolean {
-    this.controller.runJavaScript('isDetailOpen()').then((result: string) => {
-      hilog.info(DOMAIN, 'Index', 'isDetailOpen result: %{public}s', result);
-      if (result === 'true') {
-        this.controller.runJavaScript('closePokedexDetail()');
-      } else {
-        this.controller.backward();
-      }
-    }).catch((err: Error) => {
-      hilog.error(DOMAIN, 'Index', 'isDetailOpen error: %{public}s', err.message);
-    });
-    return true;
+    hilog.info(DOMAIN, 'Index', 'onBackPress, isDetailOpen: %{public}s', this.isDetailOpen ? 'true' : 'false');
+    if (this.isDetailOpen) {
+      this.controller.runJavaScript('closePokedexDetail()');
+      return true;
+    }
+    return false;
   }
 
   build() {

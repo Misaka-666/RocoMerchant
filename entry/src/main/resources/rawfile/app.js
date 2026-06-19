@@ -752,6 +752,9 @@ function showPokedexDetail(index) {
     }
 
     document.getElementById("pokedex-detail").classList.remove("hidden");
+    if (window.AndroidBridge && window.AndroidBridge.notifyDetailOpen) {
+        window.AndroidBridge.notifyDetailOpen();
+    }
 }
 
 function renderStatBar(label, value, color, max) {
@@ -781,6 +784,9 @@ function closePokedexDetail() {
     var detail = document.getElementById("pokedex-detail");
     if (detail) {
         detail.classList.add("hidden");
+    }
+    if (window.AndroidBridge && window.AndroidBridge.notifyDetailClose) {
+        window.AndroidBridge.notifyDetailClose();
     }
 }
 
