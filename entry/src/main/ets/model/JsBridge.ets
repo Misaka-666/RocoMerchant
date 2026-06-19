@@ -33,9 +33,16 @@ export class JsBridge {
 
       hilog.info(DOMAIN, TAG, 'fetchApi response code: %{public}d', response.responseCode);
 
+      let body: object;
+      if (typeof response.result === 'string') {
+        body = JSON.parse(response.result);
+      } else {
+        body = response.result as object;
+      }
+
       const result: ApiResponse = {
         status: response.responseCode,
-        body: JSON.parse(response.result as string)
+        body: body
       };
 
       this.callbackJs(requestId, JSON.stringify(result));
