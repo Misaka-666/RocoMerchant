@@ -300,13 +300,60 @@ function switchTab(tab) {
 
 // 孵蛋鉴定功能
 var eggData = null;
+var EGG_DATA_URL = "https://raw.githubusercontent.com/Misaka-666/RocoMerchant/master/egg-data-versioned.json";
 
 function loadEggDataNative() {
+    log("Loading egg data");
+
+    // 1. 先使用嵌入的默认数据
     if (typeof EGG_SIZES_DATA !== 'undefined') {
         eggData = EGG_SIZES_DATA;
-        log("Loaded " + eggData.length + " egg size entries from embedded data");
-    } else {
-        log("EGG_SIZES_DATA not found");
+        log("Loaded " + eggData.length + " entries from embedded data");
+    }
+
+    // 2. 检查本地缓存
+    try {
+        var cached = localStorage.getItem('egg_data_cache');
+        if (cached) {
+            var cacheObj = JSON.parse(cached);
+            if (cacheObj.items && cacheObj.items.length > 0) {
+                eggData = cacheObj.items;
+                log("Loaded " + eggData.length + " entries from cache, version=" + cacheObj.version);
+            }
+        }
+    } catch (e) {
+        log("Cache load error: " + e.message);
+    }
+
+    // 3. 从网络获取最新数据
+    fetchRemoteEggData();
+}
+
+function fetchRemoteEggData() {
+    if (window.AndroidBridge && window.AndroidBridge.fetchApi) {
+        var id = String(++_reqId);
+        _pending[id] = {
+            resolve: function(data) {
+                if (data && data.items && data.items.length > 0) {
+                    eggData = data.items;
+                    log("Updated from remote, " + eggData.length + " entries, version=" + data.version);
+                    try {
+                        localStorage.setItem('egg_data_cache', JSON.stringify(data));
+                    } catch (e) {
+                        log("Cache save error: " + e.message);
+                    }
+                }
+            },
+            reject: function(err) {
+                log("Remote fetch failed, using cached/embedded data");
+            }
+        };
+        try {
+            window.AndroidBridge.fetchApi(id, EGG_DATA_URL, "");
+        } catch (e) {
+            delete _pending[id];
+            log("Remote fetch error: " + e.message);
+        }
     }
 }
 
