@@ -782,5 +782,16 @@ function closePokedexDetail() {
     if (detail) {
         detail.style.display = "none";
     }
-    return false;
 }
+
+// 初始化返回按钮事件
+document.addEventListener('DOMContentLoaded', function() {
+    var backBtn = document.getElementById('btn-back-detail');
+    if (backBtn) {
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closePokedexDetail();
+        });
+    }
+});

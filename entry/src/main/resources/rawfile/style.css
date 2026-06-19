@@ -819,6 +819,13 @@ html, body {
     font-size: 14px;
     font-family: var(--font);
     cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.pokedex-detail-back:active {
+    background: rgba(255, 255, 255, 1);
 }
 
 .pokedex-detail-no {
