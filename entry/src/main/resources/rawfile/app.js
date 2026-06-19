@@ -57,7 +57,6 @@ function processData(data) {
     }));
 
     const historyGroups = [];
-    const rounds = data.rounds || {};
     for (let i = 1; i <= 4; i++) {
         if (i !== round && rounds[String(i)]) {
             historyGroups.push({
