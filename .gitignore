@@ -10,3 +10,8 @@
 /.clang-tidy
 **/.test
 /.appanalyzer
+
+# Signing config (contains sensitive data)
+*.p12
+*.cer
+*.p7b
