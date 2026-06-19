@@ -33,14 +33,17 @@ function showState(id) {
 }
 
 function processData(data) {
-    if (!data || !data.items) return null;
+    if (!data || !data.rounds) return null;
 
     const round = data.round || 1;
     const status = data.status || "open";
     const startedAt = data.startedAtBeijing || "";
     const nextRefresh = data.nextRefreshBeijing || "";
 
-    const activeProducts = data.items.map(item => ({
+    const rounds = data.rounds || {};
+    const currentRoundItems = rounds[String(round)] || data.items || [];
+
+    const activeProducts = currentRoundItems.map(item => ({
         name: item.name || "未知商品",
         image: item.image || "",
         price: item.price || "",
