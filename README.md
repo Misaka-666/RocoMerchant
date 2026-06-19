@@ -1,12 +1,23 @@
-# 洛克商人助手 (RocoMerchant)
+# 洛克王国助手 (RocoMerchant)
 
-鸿蒙版洛克商人助手，用于查看洛克王国远行商人商品信息。
+鸿蒙版洛克王国助手，包含远行商人查询和孵蛋鉴定功能。
 
 ## 功能特性
 
+### 远行商人
 - 商品数据展示（道具、精灵、额外道具）
-- 轮次刷新提醒（08:00 / 12:00 / 16:00 / 20:00）
-- API Key 管理
+- 根据北京时间自动计算当前轮次
+- 倒计时显示下次刷新时间
+- 历史轮次商品查看
+
+### 孵蛋鉴定
+- 输入蛋身高和体重反查精灵
+- 支持只输入身高或只输入体重
+- 显示置信度和体型分类
+- 数据自动更新（GitHub Actions 每天爬取）
+
+### 其他
+- 底部导航栏切换功能
 - 沉浸式全屏显示
 - 鸿蒙字体支持
 
@@ -22,70 +33,62 @@
 ```
 RocoMerchant/
 ├── AppScope/                          # 应用配置
-│   ├── app.json5                      # 应用元数据
-│   └── resources/                     # 应用资源
-├── entry/                             # 主模块
-│   └── src/main/
-│       ├── ets/                        # ArkTS 源码
-│       │   ├── entryability/           # 入口 Ability
-│       │   ├── model/                  # 数据模型
-│       │   │   └── JsBridge.ets        # JS Bridge
-│       │   ├── pages/                  # 页面
-│       │   │   ├── Index.ets           # 主页面（WebView）
-│       │   │   └── Settings.ets        # 设置页面
-│       │   └── util/                   # 工具类
-│       │       ├── NotificationUtil.ets # 通知工具
-│       │       └── StorageUtil.ets      # 存储工具
-│       └── resources/                  # 资源文件
-│           └── rawfile/                # 前端资源
-│               ├── index.html          # 主页面
-│               ├── app.js              # 业务逻辑
-│               ├── style.css           # 样式文件
-│               └── ttf/                # 字体文件
-├── build-profile.json5                 # 构建配置
-└── oh-package.json5                    # 依赖配置
+├── entry/src/main/
+│   ├── ets/
+│   │   ├── entryability/EntryAbility.ets  # 入口 Ability
+│   │   ├── model/JsBridge.ets             # JS Bridge
+│   │   └── pages/Index.ets                # 主页面
+│   └── resources/rawfile/
+│       ├── index.html                     # 主页面
+│       ├── app.js                         # 远行商人逻辑
+│       ├── egg-data.js                    # 孵蛋数据（嵌入）
+│       ├── egg-data.json                  # 孵蛋数据（JSON）
+│       ├── style.css                      # 样式文件
+│       └── ttf/                           # 鸿蒙字体
+├── .github/
+│   ├── scripts/fetch-egg-data.js          # 蛋数据爬虫
+│   └── workflows/update-egg-data.yml      # 自动更新工作流
+└── egg-data-versioned.json                # 版本化蛋数据
 ```
+
+## 数据来源
+
+| 功能 | 数据源 | 更新方式 |
+|------|--------|----------|
+| 远行商人 | rocokingdomworld.org/data/merchant.json | 实时获取 |
+| 孵蛋鉴定 | rocokingdomworld.org/zh/egg-groups | GitHub Actions 每天自动爬取 |
 
 ## 安装说明
 
-### 方式一：源码构建
-
-1. 克隆项目
-   ```bash
-   git clone https://github.com/Misaka-666/RocoMerchant.git
-   ```
-
-2. 使用 DevEco Studio 打开项目
-
-3. 连接设备或启动模拟器
-
-4. 点击 Run 运行
-
-### 方式二：HAP 安装
+### 方式一：HAP 安装
 
 1. 从 [Releases](https://github.com/Misaka-666/RocoMerchant/releases) 下载 `RocoMerchant.hap`
-
 2. 使用 hdc 安装
    ```bash
    hdc install RocoMerchant.hap
    ```
 
+### 方式二：源码构建
+
+1. 克隆项目
+   ```bash
+   git clone https://github.com/Misaka-666/RocoMerchant.git
+   ```
+2. 使用 DevEco Studio 打开项目
+3. 连接设备或启动模拟器
+4. 点击 Run 运行
+
 ## 使用说明
 
-1. 启动应用后，点击"前往设置"
-2. 输入你的 ROCOM API Key
-3. 点击保存
-4. 返回主页面，商品数据将自动加载
+### 远行商人
+- 启动应用后自动加载当前轮次商品
+- 显示当前轮次、倒计时、在售商品
+- 底部可查看历史轮次商品
 
-## 配置说明
-
-### API Key
-
-应用需要 ROCOM API Key 才能获取商品数据。请前往 [ROCOM 官网](https://rocom.cn) 申请。
-
-### 通知权限
-
-应用需要通知权限才能在商品刷新时发送提醒。首次启动时会请求权限授权。
+### 孵蛋鉴定
+- 点击底部"孵蛋鉴定"切换页面
+- 输入蛋的身高（米）和/或体重（kg）
+- 点击"鉴定"查看匹配的精灵
 
 ## 开发说明
 
@@ -99,23 +102,32 @@ hvigorw --mode project assembleApp -p buildMode=debug
 hvigorw --mode project assembleApp -p buildMode=release
 ```
 
-### 主要依赖
+### 更新蛋数据
 
-- `@kit.ArkUI`：ArkUI 组件库
-- `@kit.NetworkKit`：网络请求
-- `@kit.NotificationKit`：通知管理
-- `@kit.BackgroundTasksKit`：后台任务
-- `@ohos.web.webview`：WebView 组件
+蛋数据通过 GitHub Actions 自动更新：
+- 每天北京时间 08:00 自动运行
+- 也可在 GitHub 手动触发：Actions → Update Egg Data → Run workflow
 
 ## 版本历史
+
+### v1.2.0 (2026-06-19)
+
+- 新增孵蛋鉴定功能
+- 底部导航栏切换
+- 蛋数据自动更新（GitHub Actions）
+- 清理无用代码
+
+### v1.1.0 (2026-06-19)
+
+- 更换数据源为 rocokingdomworld.org
+- 无需 API Key
+- 根据北京时间自动计算轮次
 
 ### v1.0.0 (2026-06-18)
 
 - 初始版本
 - WebView 混合架构
-- 商品数据展示
-- API Key 管理
-- 沉浸式全屏显示
+- 远行商人商品展示
 
 ## 许可证
 
