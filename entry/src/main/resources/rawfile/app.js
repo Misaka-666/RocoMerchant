@@ -604,7 +604,7 @@ function renderPokedex(data) {
         var typeColor = TYPE_COLORS[s.type.split(" / ")[0]] || "#999";
         var typeName = TYPE_NAMES[s.type.split(" / ")[0]] || s.type;
 
-        html += '<div class="pokedex-card">';
+        html += '<div class="pokedex-card" onclick="showPokedexDetail(' + i + ')">';
         html += '  <div class="pokedex-card-no">' + escHtml(s.no) + '</div>';
         html += '  <div class="pokedex-card-img"><img src="https://rocokingdomworld.org' + s.pic + '" onerror="this.parentElement.innerHTML=\'?\'" alt=""></div>';
         html += '  <div class="pokedex-card-name">' + escHtml(s.name) + '</div>';
@@ -615,4 +615,38 @@ function renderPokedex(data) {
     }
 
     grid.innerHTML = html;
+}
+
+function showPokedexDetail(index) {
+    if (!pokedexData || !pokedexData[index]) return;
+
+    var s = pokedexData[index];
+    var typeColor = TYPE_COLORS[s.type.split(" / ")[0]] || "#999";
+    var typeName = TYPE_NAMES[s.type.split(" / ")[0]] || s.type;
+
+    document.getElementById("detail-no").textContent = s.no;
+    document.getElementById("detail-img").innerHTML = '<img src="https://rocokingdomworld.org' + s.pic + '" onerror="this.parentElement.innerHTML=\'?\'" alt="">';
+    document.getElementById("detail-name").textContent = s.name;
+    document.getElementById("detail-name-en").textContent = s.nameEn;
+    document.getElementById("detail-type").innerHTML = '<span class="pokedex-card-type" style="background:' + typeColor + '">' + typeName + '</span>';
+    document.getElementById("detail-stats").textContent = '种族值: ' + s.total;
+
+    var infoHtml = '';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">编号</span><span class="pokedex-detail-info-value">' + s.no + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">中文名</span><span class="pokedex-detail-info-value">' + s.name + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">英文名</span><span class="pokedex-detail-info-value">' + s.nameEn + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">属性</span><span class="pokedex-detail-info-value">' + s.type + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">种族值</span><span class="pokedex-detail-info-value">' + s.total + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">进化阶段</span><span class="pokedex-detail-info-value">' + s.formStage + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">形态类型</span><span class="pokedex-detail-info-value">' + s.formType + '</span></div>';
+    infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">闪光</span><span class="pokedex-detail-info-value">' + s.shiny + '</span></div>';
+    document.getElementById("detail-info").innerHTML = infoHtml;
+
+    document.getElementById("detail-link").href = 'https://rocokingdomworld.org/zh/pokedex/' + s.slug;
+
+    document.getElementById("pokedex-detail").style.display = "block";
+}
+
+function closePokedexDetail() {
+    document.getElementById("pokedex-detail").style.display = "none";
 }

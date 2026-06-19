@@ -136,6 +136,21 @@
                     <div class="empty-text">没有找到匹配的精灵</div>
                 </div>
 
+                <!-- 精灵详情弹出层 -->
+                <div id="pokedex-detail" class="pokedex-detail" style="display:none">
+                    <div class="pokedex-detail-header">
+                        <button class="pokedex-detail-back" onclick="closePokedexDetail()">← 返回</button>
+                        <div class="pokedex-detail-no" id="detail-no"></div>
+                    </div>
+                    <div class="pokedex-detail-img" id="detail-img"></div>
+                    <div class="pokedex-detail-name" id="detail-name"></div>
+                    <div class="pokedex-detail-name-en" id="detail-name-en"></div>
+                    <div class="pokedex-detail-type" id="detail-type"></div>
+                    <div class="pokedex-detail-stats" id="detail-stats"></div>
+                    <div class="pokedex-detail-info" id="detail-info"></div>
+                    <a class="pokedex-detail-link" id="detail-link" href="#" target="_blank">在网页中查看完整资料 →</a>
+                </div>
+
             </div>
         </div>
 
