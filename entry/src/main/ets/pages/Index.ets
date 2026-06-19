@@ -14,8 +14,8 @@ struct Index {
 
   aboutToAppear(): void {
     this.jsBridge.setController(this.controller);
-    const context = getContext(this) as common.UIAbilityContext;
-    this.jsBridge.setContext(context);
+    const ctx = getContext() as common.UIAbilityContext;
+    this.jsBridge.setContext(ctx);
   }
 
   build() {

@@ -123,7 +123,8 @@ export class ReminderService {
       );
 
       if (response.responseCode === 200) {
-        const result: ApiResult = JSON.parse(response.result as string);
+        const resultStr = typeof response.result === 'string' ? response.result : JSON.stringify(response.result);
+        const result: ApiResult = JSON.parse(resultStr);
         if (result.code === 0 && result.data) {
           const activities: MerchantActivity[] = result.data.merchantActivities || [];
           if (activities.length > 0) {

@@ -2,7 +2,6 @@ import webview from '@ohos.web.webview';
 import { http } from '@kit.NetworkKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { common } from '@kit.AbilityKit';
-import { util } from '@kit.ArkTS';
 
 const DOMAIN = 0x0000;
 const TAG = 'JsBridge';
@@ -40,27 +39,20 @@ export class JsBridge {
 
       hilog.info(DOMAIN, TAG, 'fetchApi response code: %{public}d', response.responseCode);
 
-      let body: object;
+      let bodyStr: string;
       if (typeof response.result === 'string') {
-        body = JSON.parse(response.result);
+        bodyStr = response.result;
       } else {
-        body = response.result as object;
+        bodyStr = JSON.stringify(response.result);
       }
 
-      const result: ApiResponse = {
-        status: response.responseCode,
-        body: body
-      };
-
-      this.callbackJs(requestId, JSON.stringify(result));
+      const resultStr = '{"status":' + response.responseCode + ',"body":' + bodyStr + '}';
+      this.callbackJs(requestId, resultStr);
       httpRequest.destroy();
     } catch (error) {
       hilog.error(DOMAIN, TAG, 'fetchApi error: %{public}s', JSON.stringify(error));
-      const errorResult: ApiResponse = {
-        status: 0,
-        error: (error as Error).message || 'Unknown error'
-      };
-      this.callbackJs(requestId, JSON.stringify(errorResult));
+      const errorMsg = (error instanceof Error) ? error.message : 'Unknown error';
+      this.callbackJs(requestId, '{"status":0,"error":"' + errorMsg.replace(/"/g, '\\"') + '"}');
     }
   }
 
@@ -74,13 +66,12 @@ export class JsBridge {
     try {
       const resourceMgr = this.context.resourceManager;
       const rawData = await resourceMgr.getRawFileContent('egg-data.json');
-      const decoder = new util.TextDecoder('utf-8');
-      const content = decoder.decode(rawData);
+      const content = String.fromCharCode(...rawData);
       hilog.info(DOMAIN, TAG, 'loadEggData success, length: %{public}d', content.length);
       this.callbackJs(requestId, '{"status":200,"body":' + content + '}');
     } catch (error) {
       hilog.error(DOMAIN, TAG, 'loadEggData error: %{public}s', JSON.stringify(error));
-      this.callbackJs(requestId, '{"status":0,"error":"' + JSON.stringify(error) + '"}');
+      this.callbackJs(requestId, '{"status":0,"error":"load failed"}');
     }
   }
 
@@ -93,6 +84,7 @@ export class JsBridge {
     const escaped = response
       .replace(/\\/g, '\\\\')
       .replace(/'/g, "\\'")
+      .replace(/"/g, '\\"')
       .replace(/\n/g, '\\n')
       .replace(/\r/g, '')
       .replace(/\t/g, '\\t');

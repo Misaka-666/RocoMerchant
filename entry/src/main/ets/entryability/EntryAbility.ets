@@ -28,7 +28,7 @@ export default class EntryAbility extends UIAbility {
     this.setImmersiveMode(windowStage);
 
     windowStage.loadContent('pages/Index', (err) => {
-      if (err.code) {
+      if (err && err.code) {
         hilog.error(DOMAIN, 'EntryAbility', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
         return;
       }
