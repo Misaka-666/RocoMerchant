@@ -275,3 +275,162 @@ if (document.readyState === "loading") {
 } else {
     loadData();
 }
+
+// Tab 切换
+function switchTab(tab) {
+    var merchantPage = document.getElementById("page-merchant");
+    var eggPage = document.getElementById("page-egg");
+    var navItems = document.querySelectorAll(".nav-item");
+
+    merchantPage.classList.remove("active");
+    eggPage.classList.remove("active");
+
+    for (var i = 0; i < navItems.length; i++) {
+        navItems[i].classList.remove("active");
+    }
+
+    if (tab === "merchant") {
+        merchantPage.classList.add("active");
+        navItems[0].classList.add("active");
+    } else {
+        eggPage.classList.add("active");
+        navItems[1].classList.add("active");
+    }
+}
+
+// 孵蛋鉴定功能
+var eggData = null;
+
+function loadEggData() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "egg-data.json", true);
+    xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            eggData = JSON.parse(xhr.responseText);
+            log("Loaded " + eggData.length + " egg size entries");
+        }
+    };
+    xhr.send();
+}
+
+function searchEggs() {
+    var heightInput = document.getElementById("input-height").value;
+    var weightInput = document.getElementById("input-weight").value;
+
+    var height = heightInput ? parseFloat(heightInput) : null;
+    var weight = weightInput ? parseFloat(weightInput) : null;
+
+    if (height === null && weight === null) {
+        return;
+    }
+
+    if (!eggData) {
+        return;
+    }
+
+    var results = matchEggs(height, weight);
+    displayEggResults(results);
+}
+
+function matchEggs(height, weight) {
+    var matches = [];
+
+    for (var i = 0; i < eggData.length; i++) {
+        var entry = eggData[i];
+        var heightMatch = true;
+        var weightMatch = true;
+
+        if (height !== null) {
+            heightMatch = height >= entry.heightMin && height <= entry.heightMax;
+        }
+        if (weight !== null) {
+            weightMatch = weight >= entry.weightMin && weight <= entry.weightMax;
+        }
+
+        if (heightMatch && weightMatch) {
+            var confidence = (height !== null && weight !== null) ? "high" : "medium";
+            var bodyType = height !== null ? getBodyType(height, entry.heightMin, entry.heightMax) : "";
+
+            matches.push({
+                name: entry.name,
+                nameEn: entry.nameEn,
+                pic: entry.pic,
+                heightMin: entry.heightMin,
+                heightMax: entry.heightMax,
+                weightMin: entry.weightMin,
+                weightMax: entry.weightMax,
+                confidence: confidence,
+                bodyType: bodyType
+            });
+        }
+    }
+
+    matches.sort(function(a, b) {
+        if (a.confidence === "high" && b.confidence !== "high") return -1;
+        if (a.confidence !== "high" && b.confidence === "high") return 1;
+        return 0;
+    });
+
+    return matches;
+}
+
+function getBodyType(value, min, max) {
+    if (min === max) return "标准体型";
+    var position = (value - min) / (max - min);
+    if (position < -0.1) return "迷你小不点";
+    if (position < 0.15) return "小不点";
+    if (position < 0.35) return "偏小型";
+    if (position <= 0.65) return "标准体型";
+    if (position <= 0.85) return "偏大型";
+    if (position <= 1.1) return "大块头";
+    return "巨型大块头";
+}
+
+function displayEggResults(results) {
+    var resultSection = document.getElementById("result-section");
+    var emptyState = document.getElementById("empty-state");
+    var initialState = document.getElementById("initial-state");
+    var resultList = document.getElementById("result-list");
+    var resultCount = document.getElementById("result-count");
+
+    initialState.style.display = "none";
+
+    if (results.length === 0) {
+        resultSection.style.display = "none";
+        emptyState.style.display = "block";
+        return;
+    }
+
+    emptyState.style.display = "none";
+    resultSection.style.display = "block";
+    resultCount.textContent = results.length;
+
+    var html = "";
+    for (var i = 0; i < results.length; i++) {
+        var r = results[i];
+        var confidenceClass = r.confidence === "high" ? "confidence-high" : "confidence-medium";
+        var confidenceText = r.confidence === "high" ? "高置信" : "可能匹配";
+
+        html += '<div class="result-card">';
+        html += '  <div class="result-image"><img src="https://rocokingdomworld.org' + r.pic + '" onerror="this.parentElement.innerHTML=\'🥚\'" alt=""></div>';
+        html += '  <div class="result-info">';
+        html += '    <div class="result-name">' + escHtml(r.name) + '</div>';
+        html += '    <div class="result-name-en">' + escHtml(r.nameEn) + '</div>';
+        html += '    <div class="result-tags">';
+        html += '      <span class="tag ' + confidenceClass + '">' + confidenceText + '</span>';
+        if (r.bodyType) {
+            html += '      <span class="tag">' + escHtml(r.bodyType) + '</span>';
+        }
+        html += '    </div>';
+        html += '    <div class="result-range">';
+        html += '      <div>蛋身高: ' + r.heightMin + ' - ' + r.heightMax + ' m</div>';
+        html += '      <div>蛋体重: ' + r.weightMin + ' - ' + r.weightMax + ' kg</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '</div>';
+    }
+
+    resultList.innerHTML = html;
+}
+
+loadEggData();
