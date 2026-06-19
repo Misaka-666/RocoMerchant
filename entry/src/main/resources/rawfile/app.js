@@ -14,9 +14,8 @@ function _nativeCallback(requestId, responseStr) {
         if (resp.error) {
             p.reject(new Error(resp.error));
         } else if (resp.status >= 200 && resp.status < 300) {
-            const body = typeof resp.body === 'string' ? JSON.parse(resp.body) : resp.body;
-            log("Body parsed, keys=" + Object.keys(body).join(","));
-            p.resolve(body);
+            log("Body keys=" + Object.keys(resp.body || {}).join(","));
+            p.resolve(resp.body);
         } else {
             p.reject(new Error("HTTP " + resp.status));
         }

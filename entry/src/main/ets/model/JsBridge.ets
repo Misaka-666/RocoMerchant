@@ -67,9 +67,12 @@ export class JsBridge {
       .replace(/\\/g, '\\\\')
       .replace(/'/g, "\\'")
       .replace(/\n/g, '\\n')
-      .replace(/\r/g, '');
+      .replace(/\r/g, '')
+      .replace(/\t/g, '\\t');
 
     const jsCode = "if(typeof _nativeCallback==='function') _nativeCallback('" + requestId + "','" + escaped + "')";
+
+    hilog.info(DOMAIN, TAG, 'callbackJs executing, requestId: %{public}s', requestId);
 
     this.controller.runJavaScript(jsCode).then(() => {
       hilog.info(DOMAIN, TAG, 'callbackJs success');
