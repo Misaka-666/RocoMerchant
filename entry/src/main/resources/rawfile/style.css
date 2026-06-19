@@ -917,3 +917,140 @@ html, body {
     font-size: 14px;
     font-weight: 600;
 }
+
+/* 详情页面新增样式 */
+.pokedex-detail-section {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+}
+
+.pokedex-detail-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-1);
+    margin-bottom: 10px;
+}
+
+.pokedex-detail-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+}
+
+.pokedex-detail-trait-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #a0631d;
+    margin-bottom: 4px;
+}
+
+.pokedex-detail-trait-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+}
+
+.stat-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.stat-bar-label {
+    width: 48px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-2);
+    text-align: right;
+}
+
+.stat-bar-track {
+    flex: 1;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s;
+}
+
+.stat-bar-value {
+    width: 32px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-1);
+    text-align: right;
+}
+
+.matchup-group {
+    margin-bottom: 10px;
+}
+
+.matchup-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-2);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.matchup-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.matchup-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.skill-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+.skill-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-2);
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+}
+
+.skill-table td {
+    padding: 6px 4px;
+    border-bottom: 1px solid rgba(118, 97, 74, 0.1);
+    color: var(--text-1);
+    font-weight: 500;
+}
+
+.skill-table .skill-type {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.skill-table .skill-category {
+    font-size: 10px;
+    color: var(--text-2);
+}

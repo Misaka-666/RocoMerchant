@@ -631,6 +631,7 @@ function showPokedexDetail(index) {
     document.getElementById("detail-type").innerHTML = '<span class="pokedex-card-type" style="background:' + typeColor + '">' + typeName + '</span>';
     document.getElementById("detail-stats").textContent = '种族值: ' + s.total;
 
+    // 基础信息
     var infoHtml = '';
     infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">编号</span><span class="pokedex-detail-info-value">' + s.no + '</span></div>';
     infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">中文名</span><span class="pokedex-detail-info-value">' + s.name + '</span></div>';
@@ -640,11 +641,141 @@ function showPokedexDetail(index) {
     infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">进化阶段</span><span class="pokedex-detail-info-value">' + s.formStage + '</span></div>';
     infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">形态类型</span><span class="pokedex-detail-info-value">' + s.formType + '</span></div>';
     infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">闪光</span><span class="pokedex-detail-info-value">' + s.shiny + '</span></div>';
+
+    // 获取详情数据
+    var detail = null;
+    if (typeof POKEDEX_DETAIL_DATA !== 'undefined' && POKEDEX_DETAIL_DATA[s.slug]) {
+        detail = POKEDEX_DETAIL_DATA[s.slug];
+    }
+
+    // 添加详情信息
+    if (detail) {
+        if (detail.height) {
+            infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">身高</span><span class="pokedex-detail-info-value">' + detail.height + '</span></div>';
+        }
+        if (detail.weight) {
+            infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">体重</span><span class="pokedex-detail-info-value">' + detail.weight + '</span></div>';
+        }
+        if (detail.obtainMethod) {
+            infoHtml += '<div class="pokedex-detail-info-row"><span class="pokedex-detail-info-label">获取方式</span><span class="pokedex-detail-info-value">' + detail.obtainMethod + '</span></div>';
+        }
+    }
     document.getElementById("detail-info").innerHTML = infoHtml;
+
+    // 描述
+    var descSection = document.getElementById("detail-desc-section");
+    if (detail && detail.description) {
+        descSection.style.display = "block";
+        document.getElementById("detail-desc").textContent = detail.description;
+    } else {
+        descSection.style.display = "none";
+    }
+
+    // 特性
+    var traitSection = document.getElementById("detail-trait-section");
+    if (detail && detail.traitName) {
+        traitSection.style.display = "block";
+        var traitHtml = '<div class="pokedex-detail-trait-name">' + escHtml(detail.traitName) + '</div>';
+        if (detail.traitDesc) {
+            traitHtml += '<div class="pokedex-detail-trait-desc">' + escHtml(detail.traitDesc) + '</div>';
+        }
+        document.getElementById("detail-trait").innerHTML = traitHtml;
+    } else {
+        traitSection.style.display = "none";
+    }
+
+    // 种族值
+    var statsSection = document.getElementById("detail-base-stats-section");
+    if (detail && detail.stats && (detail.stats.hp > 0 || detail.stats.atk > 0)) {
+        statsSection.style.display = "block";
+        var maxStat = 255;
+        var statsHtml = '';
+        statsHtml += renderStatBar('HP', detail.stats.hp, '#86EFAC', maxStat);
+        statsHtml += renderStatBar('ATK', detail.stats.atk, '#FDBA74', maxStat);
+        statsHtml += renderStatBar('M.ATK', detail.stats.matk, '#C4B5FD', maxStat);
+        statsHtml += renderStatBar('DEF', detail.stats.def, '#FCD34D', maxStat);
+        statsHtml += renderStatBar('M.DEF', detail.stats.mdef, '#7DD3FC', maxStat);
+        statsHtml += renderStatBar('SPD', detail.stats.spd, '#F472B6', maxStat);
+        document.getElementById("detail-base-stats").innerHTML = statsHtml;
+    } else {
+        statsSection.style.display = "none";
+    }
+
+    // 属性克制
+    var matchupsSection = document.getElementById("detail-matchups-section");
+    if (detail && detail.matchups && (detail.matchups.strongTo.length > 0 || detail.matchups.weakTo.length > 0)) {
+        matchupsSection.style.display = "block";
+        var mHtml = '';
+        if (detail.matchups.strongTo.length > 0) {
+            mHtml += renderMatchupGroup('攻击 2 倍克制', detail.matchups.strongTo, 'strong');
+        }
+        if (detail.matchups.weakTo.length > 0) {
+            mHtml += renderMatchupGroup('受到 2 倍克制', detail.matchups.weakTo, 'weak');
+        }
+        if (detail.matchups.resistFrom.length > 0) {
+            mHtml += renderMatchupGroup('受到 0.5 倍伤害', detail.matchups.resistFrom, 'resist');
+        }
+        if (detail.matchups.weakFrom.length > 0) {
+            mHtml += renderMatchupGroup('攻击 0.5 倍伤害', detail.matchups.weakFrom, 'weak');
+        }
+        document.getElementById("detail-matchups").innerHTML = mHtml;
+    } else {
+        matchupsSection.style.display = "none";
+    }
+
+    // 技能
+    var skillsSection = document.getElementById("detail-skills-section");
+    if (detail && detail.skills && detail.skills.length > 0) {
+        skillsSection.style.display = "block";
+        var sHtml = '<table class="skill-table">';
+        sHtml += '<thead><tr><th>Lv</th><th>技能</th><th>属性</th><th>分类</th><th>威力</th><th>PP</th><th>效果</th></tr></thead>';
+        sHtml += '<tbody>';
+        for (var i = 0; i < detail.skills.length; i++) {
+            var sk = detail.skills[i];
+            var skTypeColor = TYPE_COLORS[sk.type] || '#999';
+            var skTypeName = TYPE_NAMES[sk.type] || sk.type;
+            sHtml += '<tr>';
+            sHtml += '<td>' + sk.level + '</td>';
+            sHtml += '<td><strong>' + escHtml(sk.name) + '</strong></td>';
+            sHtml += '<td><span class="skill-type" style="background:' + skTypeColor + '">' + skTypeName + '</span></td>';
+            sHtml += '<td class="skill-category">' + escHtml(sk.category) + '</td>';
+            sHtml += '<td>' + (sk.power > 0 ? sk.power : '-') + '</td>';
+            sHtml += '<td>' + sk.pp + '</td>';
+            sHtml += '<td>' + escHtml(sk.effect) + '</td>';
+            sHtml += '</tr>';
+        }
+        sHtml += '</tbody></table>';
+        document.getElementById("detail-skills").innerHTML = sHtml;
+    } else {
+        skillsSection.style.display = "none";
+    }
 
     document.getElementById("detail-link").href = 'https://rocokingdomworld.org/zh/pokedex/' + s.slug;
 
     document.getElementById("pokedex-detail").style.display = "block";
+}
+
+function renderStatBar(label, value, color, max) {
+    var percent = Math.min(100, (value / max) * 100);
+    return '<div class="stat-bar-container">' +
+        '<div class="stat-bar-label">' + label + '</div>' +
+        '<div class="stat-bar-track"><div class="stat-bar-fill" style="width:' + percent + '%;background:' + color + '"></div></div>' +
+        '<div class="stat-bar-value">' + value + '</div>' +
+        '</div>';
+}
+
+function renderMatchupGroup(label, types, type) {
+    var html = '<div class="matchup-group">';
+    html += '<div class="matchup-label">' + label + '</div>';
+    html += '<div class="matchup-types">';
+    for (var i = 0; i < types.length; i++) {
+        var t = types[i];
+        var c = TYPE_COLORS[t] || '#999';
+        var n = TYPE_NAMES[t] || t;
+        html += '<span class="matchup-type" style="background:' + c + '">' + n + '</span>';
+    }
+    html += '</div></div>';
+    return html;
 }
 
 function closePokedexDetail() {
