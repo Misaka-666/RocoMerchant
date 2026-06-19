@@ -15,6 +15,20 @@ struct Index {
     this.jsBridge.setController(this.controller);
   }
 
+  onBackPress(): boolean {
+    this.controller.runJavaScript('isDetailOpen()').then((result: string) => {
+      hilog.info(DOMAIN, 'Index', 'isDetailOpen result: %{public}s', result);
+      if (result === 'true') {
+        this.controller.runJavaScript('closePokedexDetail()');
+      } else {
+        this.controller.backward();
+      }
+    }).catch((err: Error) => {
+      hilog.error(DOMAIN, 'Index', 'isDetailOpen error: %{public}s', err.message);
+    });
+    return true;
+  }
+
   build() {
     Column() {
       Web({ src: $rawfile('index.html'), controller: this.controller })

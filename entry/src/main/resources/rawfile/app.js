@@ -784,13 +784,19 @@ function closePokedexDetail() {
     }
 }
 
-// 绑定返回按钮事件 - 使用立即执行
+function isDetailOpen() {
+    var detail = document.getElementById("pokedex-detail");
+    if (detail && !detail.classList.contains("hidden")) {
+        return "true";
+    }
+    return "false";
+}
+
+// 绑定返回按钮事件
 (function() {
     var backBtn = document.getElementById('btn-back-detail');
     if (backBtn) {
         backBtn.onclick = function(e) {
-            e.preventDefault();
-            e.stopPropagation();
             closePokedexDetail();
             return false;
         };
