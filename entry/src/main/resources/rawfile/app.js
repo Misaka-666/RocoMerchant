@@ -94,8 +94,8 @@ function processData(data) {
     });
 
     var historyGroups = [];
-    for (var i = 1; i <= 4; i++) {
-        if (i !== round && rounds[String(i)]) {
+    for (var i = 1; i < round; i++) {
+        if (rounds[String(i)]) {
             historyGroups.push({
                 round: i,
                 timeLabel: getTimeLabel(i),
