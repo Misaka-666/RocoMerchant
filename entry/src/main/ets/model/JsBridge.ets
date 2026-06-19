@@ -2,6 +2,7 @@ import webview from '@ohos.web.webview';
 import { http } from '@kit.NetworkKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { common } from '@kit.AbilityKit';
+import { util } from '@kit.ArkTS';
 
 const DOMAIN = 0x0000;
 const TAG = 'JsBridge';
@@ -72,10 +73,8 @@ export class JsBridge {
     try {
       const resourceMgr = this.context.resourceManager;
       const rawData = await resourceMgr.getRawFileContent(fileName);
-      let content = '';
-      for (let i = 0; i < rawData.length; i++) {
-        content += String.fromCharCode(rawData[i]);
-      }
+      const decoder = new util.TextDecoder('utf-8');
+      const content = decoder.decode(rawData);
       hilog.info(DOMAIN, TAG, 'loadRawFile success, length: %{public}d', content.length);
       return content;
     } catch (error) {
