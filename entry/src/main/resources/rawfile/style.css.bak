@@ -1,0 +1,1044 @@
+@font-face {
+    font-family: "HarmonyOS";
+    src: url("ttf/HarmonyOS-Sans-SC-Regular.ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "HarmonyOS";
+    src: url("ttf/HarmonyOS-Sans-SC-Medium.ttf");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "HarmonyOS";
+    src: url("ttf/HarmonyOS-Sans-SC-Bold.ttf");
+    font-weight: 700;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --font: "HarmonyOS", "Microsoft YaHei", "PingFang SC", sans-serif;
+    --font-accent: "HarmonyOS", "Microsoft YaHei", sans-serif;
+    --text-1: #332719;
+    --text-2: #6b5846;
+    --line: rgba(118, 97, 74, 0.22);
+    --panel-bg: rgba(243, 237, 227, 0.94);
+    --card-bg: rgba(255, 252, 247, 0.82);
+    --tag-bg: rgba(255, 214, 153, 0.4);
+    --tag-text: #9a5f19;
+}
+
+html, body {
+    width: 100%;
+    font-family: var(--font);
+    color: var(--text-1);
+    background: #ece3d3;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.app-page {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #ece3d3;
+}
+
+.page-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    display: none;
+}
+
+.page-content.active {
+    display: block;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    background: url("img/bg.C8CUoi7I.jpg") center top / cover no-repeat;
+    opacity: 0.24;
+    filter: saturate(0.9);
+    z-index: 0;
+}
+
+.content-container {
+    position: relative;
+    z-index: 1;
+    padding: 16px 14px 24px;
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 16px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.86), rgba(245,236,221,0.9));
+    box-shadow: 0 10px 28px rgba(58, 39, 21, 0.08);
+}
+
+.title-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.title-main {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.title-badge {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-badge img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+.title-text {
+    font-family: var(--font-accent);
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 2px;
+}
+
+.subtitle {
+    color: var(--text-2);
+    font-size: 14px;
+}
+
+.header-side {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.summary-chip {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.72);
+    border: 1px solid rgba(179, 123, 45, 0.2);
+    color: var(--text-2);
+    font-size: 15px;
+    white-space: nowrap;
+}
+
+.summary-chip strong {
+    font-family: var(--font-accent);
+    color: #a0631d;
+    font-size: 22px;
+    margin-left: 6px;
+}
+
+.round-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.round-pill, .countdown-pill {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    border: 1px solid var(--line);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.countdown-pill {
+    color: #bf5f3f;
+    font-weight: 700;
+}
+
+.products-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.product-card {
+    display: flex;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    align-items: center;
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+}
+
+.product-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.product-name {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+}
+
+.tag-price {
+    background: rgba(159, 99, 29, 0.12);
+    color: #7a4d14;
+    font-weight: 600;
+}
+
+.product-time {
+    flex-shrink: 0;
+    text-align: right;
+    font-size: 13px;
+    color: var(--text-2);
+    white-space: nowrap;
+    align-self: flex-start;
+    padding-top: 2px;
+}
+
+.product-desc {
+    font-size: 12px;
+    color: var(--text-2);
+    margin-top: 4px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 0;
+    gap: 14px;
+}
+
+.loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--line);
+    border-top-color: #a0631d;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+    color: var(--text-2);
+    font-size: 15px;
+}
+
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 0;
+    gap: 14px;
+}
+
+.error-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(191, 95, 63, 0.1);
+    color: #bf5f3f;
+    font-size: 28px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.error-text {
+    color: var(--text-2);
+    font-size: 15px;
+    text-align: center;
+    max-width: 280px;
+}
+
+.btn-retry {
+    padding: 10px 28px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255,255,255,0.7);
+    color: var(--text-1);
+    font-size: 15px;
+    font-family: var(--font);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-retry:active {
+    background: rgba(255,255,255,0.9);
+}
+
+.history-title {
+    margin-top: 20px;
+    padding: 10px 0 8px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-2);
+    border-top: 1px solid var(--line);
+}
+
+.history-group {
+    margin-bottom: 14px;
+}
+
+.history-group-header {
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.history-group-header span {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.04);
+    font-size: 12px;
+}
+
+.history-products {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,252,247,0.5);
+    border: 1px solid rgba(118, 97, 74, 0.1);
+}
+
+.history-item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.history-item-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.history-item-name {
+    flex: 1;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.history-item-price {
+    font-size: 13px;
+    color: var(--text-2);
+    white-space: nowrap;
+}
+
+.history-item-time {
+    font-size: 12px;
+    color: var(--text-2);
+    white-space: nowrap;
+}
+
+.btn-refresh {
+    display: block;
+    margin: 20px auto 0;
+    padding: 12px 32px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(245,236,221,0.9));
+    color: var(--text-1);
+    font-size: 16px;
+    font-family: var(--font);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(58, 39, 21, 0.06);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-refresh:active {
+    transform: scale(0.97);
+    background: rgba(255,255,255,0.95);
+}
+
+/* 底部导航栏 */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 56px;
+    background: rgba(255, 252, 247, 0.95);
+    border-top: 1px solid var(--line);
+    display: flex;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    color: var(--text-2);
+    transition: color 0.2s;
+}
+
+.nav-item.active {
+    color: #a0631d;
+}
+
+.nav-icon {
+    font-size: 22px;
+}
+
+.nav-label {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* 孵蛋鉴定样式 */
+.input-section {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 16px;
+    margin-top: 16px;
+    border: 1px solid var(--line);
+}
+
+.input-group {
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-2);
+    margin-bottom: 6px;
+}
+
+.input-group input {
+    width: 100%;
+    height: 44px;
+    border: 1px solid rgba(118, 97, 74, 0.3);
+    border-radius: 8px;
+    padding: 0 12px;
+    font-size: 16px;
+    background: #fff;
+    font-family: var(--font);
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #a0631d;
+}
+
+.btn-search {
+    width: 100%;
+    height: 44px;
+    background: linear-gradient(135deg, #a0631d, #c87a2a);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: var(--font);
+    cursor: pointer;
+    margin-top: 4px;
+}
+
+.btn-search:active {
+    transform: scale(0.98);
+}
+
+.result-header {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-2);
+    margin: 16px 0 12px;
+}
+
+.result-card {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    margin-bottom: 10px;
+}
+
+.result-image {
+    width: 72px;
+    height: 72px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.result-image img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.result-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.result-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-1);
+    margin-bottom: 2px;
+}
+
+.result-name-en {
+    font-size: 12px;
+    color: var(--text-2);
+    margin-bottom: 6px;
+}
+
+.result-tags {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.confidence-high {
+    background: rgba(76, 175, 80, 0.2);
+    color: #2e7d32;
+}
+
+.confidence-medium {
+    background: rgba(255, 152, 0, 0.2);
+    color: #e65100;
+}
+
+.result-range {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.5;
+}
+
+.egg-empty {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+.empty-text {
+    font-size: 14px;
+    color: var(--text-2);
+}
+
+/* 精灵图鉴样式 */
+.pokedex-header {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.pokedex-title {
+    font-family: var(--font-accent);
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--text-1);
+}
+
+.pokedex-subtitle {
+    font-size: 13px;
+    color: var(--text-2);
+    margin-top: 4px;
+}
+
+.pokedex-search {
+    margin-bottom: 12px;
+}
+
+.pokedex-search input {
+    width: 100%;
+    height: 42px;
+    border: 1px solid rgba(118, 97, 74, 0.3);
+    border-radius: 999px;
+    padding: 0 16px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    font-family: var(--font);
+}
+
+.pokedex-search input:focus {
+    outline: none;
+    border-color: #a0631d;
+}
+
+.pokedex-filters {
+    margin-bottom: 12px;
+}
+
+.type-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.type-btn {
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(118, 97, 74, 0.2);
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--text-2);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.type-btn.active {
+    color: #fff;
+    border-color: transparent;
+}
+
+.sort-filter {
+    display: flex;
+    gap: 8px;
+}
+
+.sort-filter select {
+    flex: 1;
+    height: 36px;
+    border: 1px solid rgba(118, 97, 74, 0.3);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 13px;
+    background: rgba(255, 255, 255, 0.9);
+    font-family: var(--font);
+    color: var(--text-1);
+}
+
+.pokedex-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.pokedex-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.pokedex-card:active {
+    transform: scale(0.97);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.pokedex-card-no {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-2);
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1px 5px;
+    border-radius: 4px;
+}
+
+.pokedex-card-img {
+    width: 64px;
+    height: 64px;
+    margin: 8px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokedex-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pokedex-card-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-1);
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pokedex-card-name-en {
+    font-size: 10px;
+    color: var(--text-2);
+    margin-bottom: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pokedex-card-type {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.pokedex-card-stats {
+    font-size: 11px;
+    color: var(--text-2);
+    font-weight: 600;
+}
+
+.pokedex-empty {
+    text-align: center;
+    padding: 40px 0;
+}
+
+/* 精灵详情样式 */
+.pokedex-detail {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #ece3d3;
+    z-index: 200;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.pokedex-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.pokedex-detail-back {
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--text-1);
+    font-size: 14px;
+    font-family: var(--font);
+    cursor: pointer;
+}
+
+.pokedex-detail-no {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-2);
+}
+
+.pokedex-detail-img {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokedex-detail-img img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.pokedex-detail-name {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--text-1);
+    margin-bottom: 4px;
+}
+
+.pokedex-detail-name-en {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-2);
+    margin-bottom: 12px;
+}
+
+.pokedex-detail-type {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.pokedex-detail-type .pokedex-card-type {
+    font-size: 14px;
+    padding: 4px 12px;
+}
+
+.pokedex-detail-stats {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-1);
+    margin-bottom: 20px;
+}
+
+.pokedex-detail-info {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid var(--line);
+}
+
+.pokedex-detail-info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(118, 97, 74, 0.1);
+}
+
+.pokedex-detail-info-row:last-child {
+    border-bottom: none;
+}
+
+.pokedex-detail-info-label {
+    font-size: 14px;
+    color: var(--text-2);
+}
+
+.pokedex-detail-info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-1);
+}
+
+/* 详情页面新增样式 */
+.pokedex-detail-section {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+}
+
+.pokedex-detail-section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-1);
+    margin-bottom: 10px;
+}
+
+.pokedex-detail-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+}
+
+.pokedex-detail-trait-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: #a0631d;
+    margin-bottom: 4px;
+}
+
+.pokedex-detail-trait-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+}
+
+.stat-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.stat-bar-label {
+    width: 48px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-2);
+    text-align: right;
+}
+
+.stat-bar-track {
+    flex: 1;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 0.3s;
+}
+
+.stat-bar-value {
+    width: 32px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-1);
+    text-align: right;
+}
+
+.matchup-group {
+    margin-bottom: 10px;
+}
+
+.matchup-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-2);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.matchup-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.matchup-type {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.skill-table {
+    width: 100%;
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+.skill-table th {
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-2);
+    padding: 6px 4px;
+    border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+}
+
+.skill-table td {
+    padding: 6px 4px;
+    border-bottom: 1px solid rgba(118, 97, 74, 0.1);
+    color: var(--text-1);
+    font-weight: 500;
+}
+
+.skill-table .skill-type {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.skill-table .skill-category {
+    font-size: 10px;
+    color: var(--text-2);
+}

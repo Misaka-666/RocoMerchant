@@ -21,7 +21,13 @@
 - 搜索功能（中文名、英文名、编号）
 - 18 种属性筛选
 - 多种排序方式（编号、种族值、名称）
-- 卡片网格展示（图片、名称、属性、种族值）
+- 卡片网格展示
+- **详情页面**：
+  - 种族值进度条（HP、ATK、M.ATK、DEF、M.DEF、SPD）
+  - 技能列表（等级、属性、威力、PP、效果）
+  - 特性信息
+  - 属性克制
+  - 基础信息（身高、体重、获取方式）
 
 ### 其他
 - 底部导航栏切换功能
@@ -48,12 +54,15 @@ RocoMerchant/
 │   └── resources/rawfile/
 │       ├── index.html                     # 主页面
 │       ├── app.js                         # 业务逻辑
-│       ├── egg-data.js                    # 孵蛋数据（嵌入）
-│       ├── pokedex-data.js                # 图鉴数据（嵌入）
+│       ├── egg-data.js                    # 孵蛋数据
+│       ├── pokedex-data.js                # 图鉴基础数据
+│       ├── pokedex-detail-data.js         # 图鉴详情数据
 │       ├── style.css                      # 样式文件
 │       └── ttf/                           # 鸿蒙字体
 ├── .github/
-│   ├── scripts/fetch-egg-data.js          # 数据爬虫
+│   ├── scripts/
+│   │   ├── fetch-egg-data.js              # 蛋数据爬虫
+│   │   └── fetch-pokedex-detail.js        # 图鉴详情爬虫
 │   └── workflows/update-egg-data.yml      # 自动更新工作流
 └── egg-data-versioned.json                # 版本化蛋数据
 ```
@@ -103,6 +112,7 @@ RocoMerchant/
 - 使用搜索框搜索精灵（支持中文名、英文名、编号）
 - 点击属性按钮筛选特定属性的精灵
 - 使用排序下拉框选择排序方式
+- 点击卡片查看详情（种族值、技能、特性等）
 
 ## 开发说明
 
@@ -123,6 +133,14 @@ hvigorw --mode project assembleApp -p buildMode=release
 - 也可在 GitHub 手动触发：Actions → Update Egg Data → Run workflow
 
 ## 版本历史
+
+### v1.4.0 (2026-06-19)
+
+- 精灵图鉴详情页面完整实现
+- 种族值进度条
+- 技能列表
+- 特性信息
+- 属性克制显示
 
 ### v1.3.0 (2026-06-19)
 
