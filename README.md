@@ -1,6 +1,6 @@
 # 洛克王国助手 (RocoMerchant)
 
-鸿蒙版洛克王国助手，包含远行商人查询和孵蛋鉴定功能。
+鸿蒙版洛克王国助手，包含远行商人查询、孵蛋鉴定和精灵图鉴功能。
 
 ## 功能特性
 
@@ -15,6 +15,13 @@
 - 支持只输入身高或只输入体重
 - 显示置信度和体型分类
 - 数据自动更新（GitHub Actions 每天爬取）
+
+### 精灵图鉴
+- 400 个精灵数据
+- 搜索功能（中文名、英文名、编号）
+- 18 种属性筛选
+- 多种排序方式（编号、种族值、名称）
+- 卡片网格展示（图片、名称、属性、种族值）
 
 ### 其他
 - 底部导航栏切换功能
@@ -40,13 +47,13 @@ RocoMerchant/
 │   │   └── pages/Index.ets                # 主页面
 │   └── resources/rawfile/
 │       ├── index.html                     # 主页面
-│       ├── app.js                         # 远行商人逻辑
+│       ├── app.js                         # 业务逻辑
 │       ├── egg-data.js                    # 孵蛋数据（嵌入）
-│       ├── egg-data.json                  # 孵蛋数据（JSON）
+│       ├── pokedex-data.js                # 图鉴数据（嵌入）
 │       ├── style.css                      # 样式文件
 │       └── ttf/                           # 鸿蒙字体
 ├── .github/
-│   ├── scripts/fetch-egg-data.js          # 蛋数据爬虫
+│   ├── scripts/fetch-egg-data.js          # 数据爬虫
 │   └── workflows/update-egg-data.yml      # 自动更新工作流
 └── egg-data-versioned.json                # 版本化蛋数据
 ```
@@ -57,6 +64,7 @@ RocoMerchant/
 |------|--------|----------|
 | 远行商人 | rocokingdomworld.org/data/merchant.json | 实时获取 |
 | 孵蛋鉴定 | rocokingdomworld.org/zh/egg-groups | GitHub Actions 每天自动爬取 |
+| 精灵图鉴 | rocokingdomworld.org/zh/pokedex | 嵌入数据 |
 
 ## 安装说明
 
@@ -90,6 +98,12 @@ RocoMerchant/
 - 输入蛋的身高（米）和/或体重（kg）
 - 点击"鉴定"查看匹配的精灵
 
+### 精灵图鉴
+- 点击底部"精灵图鉴"切换页面
+- 使用搜索框搜索精灵（支持中文名、英文名、编号）
+- 点击属性按钮筛选特定属性的精灵
+- 使用排序下拉框选择排序方式
+
 ## 开发说明
 
 ### 构建命令
@@ -102,13 +116,19 @@ hvigorw --mode project assembleApp -p buildMode=debug
 hvigorw --mode project assembleApp -p buildMode=release
 ```
 
-### 更新蛋数据
+### 更新数据
 
 蛋数据通过 GitHub Actions 自动更新：
 - 每天北京时间 08:00 自动运行
 - 也可在 GitHub 手动触发：Actions → Update Egg Data → Run workflow
 
 ## 版本历史
+
+### v1.3.0 (2026-06-19)
+
+- 新增精灵图鉴功能（400 个精灵）
+- 搜索、属性筛选、排序功能
+- 三列卡片网格布局
 
 ### v1.2.0 (2026-06-19)
 
