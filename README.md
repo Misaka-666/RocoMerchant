@@ -134,7 +134,7 @@ hvigorw --mode project assembleApp -p buildMode=release
 
 ## 版本历史
 
-### v1.5.0 (2026-06-19)
+### v2.0.0 (2026-06-19)
 
 - **UI 全面优化**
   - 全新设计系统：配色方案、字体层级、间距系统、圆角系统
