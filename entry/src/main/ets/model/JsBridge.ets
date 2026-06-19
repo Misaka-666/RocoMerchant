@@ -1,10 +1,6 @@
 import webview from '@ohos.web.webview';
 import { http } from '@kit.NetworkKit';
-import { router } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { StorageUtil } from '../util/StorageUtil';
-import { NotificationUtil } from '../util/NotificationUtil';
-import { ReminderService } from '../service/ReminderService';
 
 const DOMAIN = 0x0000;
 const TAG = 'JsBridge';
@@ -22,36 +18,13 @@ export class JsBridge {
     this.controller = controller;
   }
 
-  async getApiKey(): Promise<string> {
-    hilog.info(DOMAIN, TAG, 'getApiKey called');
-    const key = await StorageUtil.getApiKey();
-    hilog.info(DOMAIN, TAG, 'getApiKey result, key length: %{public}d', key.length);
-    return key;
-  }
-
-  openSettings(): void {
-    hilog.info(DOMAIN, TAG, 'openSettings called');
-    try {
-      router.pushUrl({ url: 'pages/Settings' }, router.RouterMode.Standard, (err) => {
-        if (err) {
-          hilog.error(DOMAIN, TAG, 'pushUrl failed: %{public}s', JSON.stringify(err));
-        } else {
-          hilog.info(DOMAIN, TAG, 'pushUrl success');
-        }
-      });
-    } catch (error) {
-      hilog.error(DOMAIN, TAG, 'openSettings error: %{public}s', JSON.stringify(error));
-    }
-  }
-
   async fetchApi(requestId: string, url: string, apiKey: string): Promise<void> {
-    hilog.info(DOMAIN, TAG, 'fetchApi called, requestId: %{public}s', requestId);
+    hilog.info(DOMAIN, TAG, 'fetchApi called, requestId: %{public}s, url: %{public}s', requestId, url);
     try {
       const httpRequest = http.createHttp();
       const response = await httpRequest.request(url, {
         method: http.RequestMethod.GET,
         header: {
-          'X-API-Key': apiKey,
           'User-Agent': 'RocoMerchant/1.0'
         },
         readTimeout: 15000,
@@ -74,42 +47,6 @@ export class JsBridge {
         error: (error as Error).message || 'Unknown error'
       };
       this.callbackJs(requestId, JSON.stringify(errorResult));
-    }
-  }
-
-  async enableNotification(): Promise<boolean> {
-    hilog.info(DOMAIN, TAG, 'enableNotification called');
-    try {
-      await ReminderService.setupRoundReminders();
-      hilog.info(DOMAIN, TAG, 'Notification enabled');
-      return true;
-    } catch (error) {
-      hilog.error(DOMAIN, TAG, 'enableNotification error: %{public}s', JSON.stringify(error));
-      return false;
-    }
-  }
-
-  async disableNotification(): Promise<boolean> {
-    hilog.info(DOMAIN, TAG, 'disableNotification called');
-    try {
-      await ReminderService.cancelAllReminders();
-      await NotificationUtil.cancelAllNotifications();
-      hilog.info(DOMAIN, TAG, 'Notification disabled');
-      return true;
-    } catch (error) {
-      hilog.error(DOMAIN, TAG, 'disableNotification error: %{public}s', JSON.stringify(error));
-      return false;
-    }
-  }
-
-  async getNotificationStatus(): Promise<boolean> {
-    hilog.info(DOMAIN, TAG, 'getNotificationStatus called');
-    try {
-      const count = await ReminderService.getValidReminders();
-      return count > 0;
-    } catch (error) {
-      hilog.error(DOMAIN, TAG, 'getNotificationStatus error: %{public}s', JSON.stringify(error));
-      return false;
     }
   }
 
