@@ -276,7 +276,7 @@ if (document.readyState === "loading") {
     loadData();
 }
 
-// Tab 切换 - Spring 动画增强版
+// Tab 切换 - 修复快速切换问题
 function switchTab(tab) {
     var merchantPage = document.getElementById("page-merchant");
     var eggPage = document.getElementById("page-egg");
@@ -292,20 +292,18 @@ function switchTab(tab) {
         navItems[i].classList.remove("active");
     }
 
-    // 使用 requestAnimationFrame 确保 CSS 过渡正确触发
-    requestAnimationFrame(function() {
-        if (tab === "merchant") {
-            merchantPage.classList.add("active");
-            navItems[0].classList.add("active");
-        } else if (tab === "egg") {
-            eggPage.classList.add("active");
-            navItems[1].classList.add("active");
-        } else if (tab === "pokedex") {
-            pokedexPage.classList.add("active");
-            navItems[2].classList.add("active");
-            initPokedex();
-        }
-    });
+    // 直接添加 active 类，不使用 requestAnimationFrame
+    if (tab === "merchant") {
+        merchantPage.classList.add("active");
+        navItems[0].classList.add("active");
+    } else if (tab === "egg") {
+        eggPage.classList.add("active");
+        navItems[1].classList.add("active");
+    } else if (tab === "pokedex") {
+        pokedexPage.classList.add("active");
+        navItems[2].classList.add("active");
+        initPokedex();
+    }
 }
 
 // 孵蛋鉴定功能

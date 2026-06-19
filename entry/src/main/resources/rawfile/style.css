@@ -179,32 +179,28 @@ html, body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     
-    /* 使用 visibility + opacity 替代 display: none */
-    visibility: hidden;
+    /* 隐藏状态 */
+    display: none;
     opacity: 0;
-    pointer-events: none;
-    
-    /* 初始状态 - 从下方弹入 + 轻微缩放 */
-    transform: translateY(24px) scale(0.97);
-    
-    /* Spring 过渡动画 */
-    transition: 
-        opacity var(--duration-normal) var(--ease-spring),
-        transform var(--duration-normal) var(--ease-spring),
-        visibility 0s linear var(--duration-normal);
+    transform: translateY(20px) scale(0.98);
 }
 
 .page-content.active {
-    visibility: visible;
+    display: block;
     opacity: 1;
-    pointer-events: auto;
     transform: translateY(0) scale(1);
-    
-    /* Spring 进入动画 */
-    transition: 
-        opacity var(--duration-normal) var(--ease-spring),
-        transform var(--duration-normal) var(--ease-spring),
-        visibility 0s linear 0s;
+    animation: pageEnter 0.35s var(--ease-spring) forwards;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* 滚动条美化 */

@@ -134,6 +134,11 @@ hvigorw --mode project assembleApp -p buildMode=release
 
 ## 版本历史
 
+### v2.0.2 (2026-06-19)
+
+- 修复底部导航栏快速切换导致页面不显示的bug
+- 优化页面切换动画稳定性
+
 ### v2.0.0 (2026-06-19)
 
 - **UI 全面优化**
