@@ -5,99 +5,278 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>洛克王国助手 - 隐私政策</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+        
+        :root {
+            --ink: #1a1a2e;
+            --ink-light: #4a4a6a;
+            --ink-muted: #8888a8;
+            --surface: #fefefe;
+            --surface-dim: #f8f8fc;
+            --accent: #2d5a27;
+            --accent-light: #e8f5e5;
+            --accent-subtle: #f0f8ee;
+            --border: #e8e8f0;
+            --border-light: #f2f2f8;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
             line-height: 1.8;
-            color: #333;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--ink);
+            background: var(--surface-dim);
             min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
         }
+        
         .container {
-            max-width: 800px;
+            max-width: 720px;
             margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: var(--surface);
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
             overflow: hidden;
+            border: 1px solid var(--border);
         }
+        
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
+            padding: 48px 40px 40px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
         }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #5a8a54);
+        }
+        
         .header h1 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 600;
-            margin-bottom: 10px;
+            color: var(--ink);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
+        
         .header .subtitle {
             font-size: 14px;
-            opacity: 0.9;
+            color: var(--ink-muted);
+            font-weight: 400;
         }
+        
+        .header .effective-date {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 16px;
+            letter-spacing: 0.5px;
+        }
+        
         .content {
-            padding: 30px;
+            padding: 40px;
         }
+        
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 36px;
         }
+        
+        .section:last-child {
+            margin-bottom: 0;
+        }
+        
         .section h2 {
-            font-size: 20px;
-            color: #667eea;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #eee;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-light);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
+        
+        .section h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--ink-light);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
         .section p {
-            margin-bottom: 12px;
-            text-align: justify;
+            margin-bottom: 14px;
+            color: var(--ink-light);
+            font-size: 14px;
+            line-height: 1.9;
         }
+        
         .section ul {
-            margin-left: 20px;
-            margin-bottom: 12px;
+            margin: 12px 0;
+            padding-left: 0;
+            list-style: none;
         }
+        
         .section li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+            color: var(--ink-light);
+            line-height: 1.7;
+        }
+        
+        .section li::before {
+            content: '·';
+            position: absolute;
+            left: 4px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .highlight {
+            background: var(--accent-subtle);
+            border-left: 3px solid var(--accent);
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .highlight p {
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        
+        .highlight p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .info-item {
+            background: var(--surface-dim);
+            padding: 14px 16px;
+            border-radius: 2px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .info-item .label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--ink-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        
+        .info-item .value {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+        
+        .disclaimer {
+            background: #fff8f0;
+            border-left: 3px solid #e67e22;
+            padding: 16px 20px;
+            margin: 16px 0;
+            border-radius: 0 2px 2px 0;
+        }
+        
+        .disclaimer p {
+            color: #8a6d3b;
+            font-size: 13px;
+        }
+        
+        .contact-info {
+            background: var(--surface-dim);
+            border-radius: 2px;
+            padding: 24px;
+            margin-top: 24px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .contact-info h3 {
+            color: var(--ink);
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .contact-info p {
+            font-size: 13px;
             margin-bottom: 8px;
         }
-        .highlight {
-            background: #f8f9ff;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
+        
+        .contact-info a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease;
         }
+        
+        .contact-info a:hover {
+            border-bottom-color: var(--accent);
+        }
+        
         .footer {
-            background: #f8f9ff;
-            padding: 20px 30px;
+            background: var(--surface-dim);
+            padding: 24px 40px;
             text-align: center;
-            font-size: 13px;
-            color: #666;
-            border-top: 1px solid #eee;
-        }
-        .effective-date {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
             font-size: 12px;
-            margin-top: 10px;
+            color: var(--ink-muted);
+            border-top: 1px solid var(--border);
         }
-        .contact-info {
-            background: #fff3e0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 20px;
+        
+        .footer p {
+            margin-bottom: 4px;
         }
-        .contact-info h3 {
-            color: #e65100;
-            margin-bottom: 10px;
+        
+        .footer p:last-child {
+            margin-bottom: 0;
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 12px;
+            }
+            
+            .header {
+                padding: 32px 24px 28px;
+            }
+            
+            .content {
+                padding: 28px 24px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer {
+                padding: 20px 24px;
+            }
         }
     </style>
 </head>
@@ -118,11 +297,23 @@
 
             <div class="section">
                 <h2>二、应用信息</h2>
-                <div class="highlight">
-                    <p><strong>应用名称：</strong>洛克王国助手</p>
-                    <p><strong>开发者：</strong>Misaka-666</p>
-                    <p><strong>应用版本：</strong>2.0.2</p>
-                    <p><strong>应用类型：</strong>游戏辅助工具</p>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">应用名称</div>
+                        <div class="value">洛克王国助手</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">开发者</div>
+                        <div class="value">Misaka-666</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">应用版本</div>
+                        <div class="value">2.0.2</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">应用类型</div>
+                        <div class="value">游戏辅助工具</div>
+                    </div>
                 </div>
             </div>
 
@@ -217,7 +408,7 @@
 
             <div class="section">
                 <h2>十、免责声明</h2>
-                <div class="highlight">
+                <div class="disclaimer">
                     <p><strong>本应用为非官方第三方工具，与腾讯公司及洛克王国游戏官方无任何关联。</strong></p>
                     <p>本应用提供的数据仅供参考，游戏实际内容以官方为准。</p>
                     <p>本应用不保证数据的完全准确性和实时性。</p>
