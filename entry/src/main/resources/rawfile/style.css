@@ -803,6 +803,10 @@ html, body {
     padding-top: 56px;
 }
 
+.pokedex-detail.hidden {
+    display: none;
+}
+
 .pokedex-detail-header {
     display: flex;
     align-items: center;

@@ -751,7 +751,7 @@ function showPokedexDetail(index) {
         skillsSection.style.display = "none";
     }
 
-    document.getElementById("pokedex-detail").style.display = "block";
+    document.getElementById("pokedex-detail").classList.remove("hidden");
 }
 
 function renderStatBar(label, value, color, max) {
@@ -780,7 +780,7 @@ function renderMatchupGroup(label, types, type) {
 function closePokedexDetail() {
     var detail = document.getElementById("pokedex-detail");
     if (detail) {
-        detail.style.display = "none";
+        detail.classList.add("hidden");
     }
 }
 
