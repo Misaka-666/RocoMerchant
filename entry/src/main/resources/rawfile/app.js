@@ -750,8 +750,6 @@ function showPokedexDetail(index) {
         skillsSection.style.display = "none";
     }
 
-    document.getElementById("detail-link").href = 'https://rocokingdomworld.org/zh/pokedex/' + s.slug;
-
     document.getElementById("pokedex-detail").style.display = "block";
 }
 

@@ -906,18 +906,6 @@ html, body {
     color: var(--text-1);
 }
 
-.pokedex-detail-link {
-    display: block;
-    text-align: center;
-    padding: 12px;
-    background: linear-gradient(135deg, #a0631d, #c87a2a);
-    color: #fff;
-    border-radius: 8px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
-}
-
 /* 详情页面新增样式 */
 .pokedex-detail-section {
     background: rgba(255, 255, 255, 0.8);
