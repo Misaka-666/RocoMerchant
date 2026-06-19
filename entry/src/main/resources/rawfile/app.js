@@ -778,5 +778,9 @@ function renderMatchupGroup(label, types, type) {
 }
 
 function closePokedexDetail() {
-    document.getElementById("pokedex-detail").style.display = "none";
+    var detail = document.getElementById("pokedex-detail");
+    if (detail) {
+        detail.style.display = "none";
+    }
+    return false;
 }

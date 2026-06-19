@@ -791,7 +791,7 @@ html, body {
 
 /* 精灵详情样式 */
 .pokedex-detail {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -800,6 +800,7 @@ html, body {
     z-index: 200;
     overflow-y: auto;
     padding: 16px;
+    padding-top: 56px;
 }
 
 .pokedex-detail-header {
