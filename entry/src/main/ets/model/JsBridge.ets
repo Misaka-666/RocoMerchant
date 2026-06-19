@@ -1,6 +1,7 @@
 import webview from '@ohos.web.webview';
 import { http } from '@kit.NetworkKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { common } from '@kit.AbilityKit';
 
 const DOMAIN = 0x0000;
 const TAG = 'JsBridge';
@@ -13,9 +14,14 @@ interface ApiResponse {
 
 export class JsBridge {
   private controller: webview.WebviewController | null = null;
+  private context: common.UIAbilityContext | null = null;
 
   setController(controller: webview.WebviewController): void {
     this.controller = controller;
+  }
+
+  setContext(context: common.UIAbilityContext): void {
+    this.context = context;
   }
 
   async fetchApi(requestId: string, url: string, apiKey: string): Promise<void> {
@@ -54,6 +60,27 @@ export class JsBridge {
         error: (error as Error).message || 'Unknown error'
       };
       this.callbackJs(requestId, JSON.stringify(errorResult));
+    }
+  }
+
+  async loadRawFile(fileName: string): Promise<string> {
+    hilog.info(DOMAIN, TAG, 'loadRawFile called, fileName: %{public}s', fileName);
+    if (!this.context) {
+      hilog.error(DOMAIN, TAG, 'Context not set');
+      return '[]';
+    }
+    try {
+      const resourceMgr = this.context.resourceManager;
+      const rawData = await resourceMgr.getRawFileContent(fileName);
+      let content = '';
+      for (let i = 0; i < rawData.length; i++) {
+        content += String.fromCharCode(rawData[i]);
+      }
+      hilog.info(DOMAIN, TAG, 'loadRawFile success, length: %{public}d', content.length);
+      return content;
+    } catch (error) {
+      hilog.error(DOMAIN, TAG, 'loadRawFile error: %{public}s', JSON.stringify(error));
+      return '[]';
     }
   }
 

@@ -302,15 +302,19 @@ function switchTab(tab) {
 var eggData = null;
 
 function loadEggData() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "egg-data.json", true);
-    xhr.onload = function() {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            eggData = JSON.parse(xhr.responseText);
-            log("Loaded " + eggData.length + " egg size entries");
+    log("Loading egg data");
+    if (window.AndroidBridge && window.AndroidBridge.loadRawFile) {
+        try {
+            window.AndroidBridge.loadRawFile("egg-data.json").then(function(content) {
+                eggData = JSON.parse(content);
+                log("Loaded " + eggData.length + " egg size entries");
+            }).catch(function(err) {
+                log("Failed to load egg data: " + err);
+            });
+        } catch (e) {
+            log("Failed to load egg data: " + e.message);
         }
-    };
-    xhr.send();
+    }
 }
 
 function searchEggs() {

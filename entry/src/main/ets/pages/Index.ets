@@ -1,5 +1,6 @@
 import webview from '@ohos.web.webview';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { common } from '@kit.AbilityKit';
 import { JsBridge } from '../model/JsBridge';
 
 const DOMAIN = 0x0000;
@@ -9,10 +10,12 @@ const DOMAIN = 0x0000;
 struct Index {
   controller: webview.WebviewController = new webview.WebviewController();
   jsBridge: JsBridge = new JsBridge();
-  methodList: string[] = ['fetchApi'];
+  methodList: string[] = ['fetchApi', 'loadRawFile'];
 
   aboutToAppear(): void {
     this.jsBridge.setController(this.controller);
+    const context = getContext(this) as common.UIAbilityContext;
+    this.jsBridge.setContext(context);
   }
 
   build() {
