@@ -6,7 +6,7 @@ const URL = 'https://rocokingdomworld.org/zh/egg-groups/';
 const OUTPUT_FILE = path.join(__dirname, '../../egg-data-versioned.json');
 const JS_OUTPUT_FILE = path.join(__dirname, '../../entry/src/main/resources/rawfile/egg-data.js');
 
-function fetch(url) {
+function httpGet(url) {
   return new Promise((resolve, reject) => {
     https.get(url, { headers: { 'User-Agent': 'Mozilla/5.0' } }, (res) => {
       let data = '';
@@ -21,7 +21,7 @@ async function main() {
   console.log('Fetching egg data from:', URL);
 
   // 1. Fetch HTML page
-  const html = await fetch(URL);
+  const html = await httpGet(URL);
   console.log('HTML length:', html.length);
 
   // 2. Extract JSON from script tag
