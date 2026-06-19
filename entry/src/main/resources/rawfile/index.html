@@ -2,12 +2,15 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>洛克王国助手</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="app-page">
+
+        <!-- 状态栏模糊区域 -->
+        <div class="status-bar-blur"></div>
 
         <!-- 远行商人模块 -->
         <div id="page-merchant" class="page-content active">
@@ -140,66 +143,76 @@
         </div>
 
         <!-- 精灵详情弹出层（根级别） -->
-        <div id="pokedex-detail" class="pokedex-detail hidden">
+        <div id="pokedex-detail" class="pokedex-detail">
+            <!-- 固定头部 -->
             <div class="pokedex-detail-header">
                 <div class="pokedex-detail-back" id="btn-back-detail" onclick="closePokedexDetail(); return false;">← 返回</div>
                 <div class="pokedex-detail-no" id="detail-no"></div>
             </div>
-            <div class="pokedex-detail-img" id="detail-img"></div>
-            <div class="pokedex-detail-name" id="detail-name"></div>
-            <div class="pokedex-detail-name-en" id="detail-name-en"></div>
-            <div class="pokedex-detail-type" id="detail-type"></div>
-            <div class="pokedex-detail-stats" id="detail-stats"></div>
+            <!-- 可滚动内容 -->
+            <div class="pokedex-detail-body">
+                <div class="pokedex-detail-img" id="detail-img"></div>
+                <div class="pokedex-detail-name" id="detail-name"></div>
+                <div class="pokedex-detail-name-en" id="detail-name-en"></div>
+                <div class="pokedex-detail-type" id="detail-type"></div>
+                <div class="pokedex-detail-stats" id="detail-stats"></div>
 
-            <!-- 基础信息 -->
-            <div class="pokedex-detail-section" id="detail-info-section">
-                <div class="pokedex-detail-section-title">基础信息</div>
-                <div class="pokedex-detail-info" id="detail-info"></div>
-            </div>
+                <!-- 基础信息 -->
+                <div class="pokedex-detail-section" id="detail-info-section">
+                    <div class="pokedex-detail-section-title">基础信息</div>
+                    <div class="pokedex-detail-info" id="detail-info"></div>
+                </div>
 
-            <!-- 描述 -->
-            <div class="pokedex-detail-section" id="detail-desc-section" style="display:none">
-                <div class="pokedex-detail-section-title">介绍</div>
-                <div class="pokedex-detail-desc" id="detail-desc"></div>
-            </div>
+                <!-- 描述 -->
+                <div class="pokedex-detail-section" id="detail-desc-section" style="display:none">
+                    <div class="pokedex-detail-section-title">介绍</div>
+                    <div class="pokedex-detail-desc" id="detail-desc"></div>
+                </div>
 
-            <!-- 特性 -->
-            <div class="pokedex-detail-section" id="detail-trait-section" style="display:none">
-                <div class="pokedex-detail-section-title">特性</div>
-                <div class="pokedex-detail-trait" id="detail-trait"></div>
-            </div>
+                <!-- 特性 -->
+                <div class="pokedex-detail-section" id="detail-trait-section" style="display:none">
+                    <div class="pokedex-detail-section-title">特性</div>
+                    <div class="pokedex-detail-trait" id="detail-trait"></div>
+                </div>
 
-            <!-- 种族值 -->
-            <div class="pokedex-detail-section" id="detail-base-stats-section" style="display:none">
-                <div class="pokedex-detail-section-title">基础种族值</div>
-                <div class="pokedex-detail-base-stats" id="detail-base-stats"></div>
-            </div>
+                <!-- 种族值 -->
+                <div class="pokedex-detail-section" id="detail-base-stats-section" style="display:none">
+                    <div class="pokedex-detail-section-title">基础种族值</div>
+                    <div class="pokedex-detail-base-stats" id="detail-base-stats"></div>
+                </div>
 
-            <!-- 属性克制 -->
-            <div class="pokedex-detail-section" id="detail-matchups-section" style="display:none">
-                <div class="pokedex-detail-section-title">属性克制</div>
-                <div class="pokedex-detail-matchups" id="detail-matchups"></div>
-            </div>
+                <!-- 属性克制 -->
+                <div class="pokedex-detail-section" id="detail-matchups-section" style="display:none">
+                    <div class="pokedex-detail-section-title">属性克制</div>
+                    <div class="pokedex-detail-matchups" id="detail-matchups"></div>
+                </div>
 
-            <!-- 技能 -->
-            <div class="pokedex-detail-section" id="detail-skills-section" style="display:none">
-                <div class="pokedex-detail-section-title">技能</div>
-                <div class="pokedex-detail-skills" id="detail-skills"></div>
+                <!-- 技能 -->
+                <div class="pokedex-detail-section" id="detail-skills-section" style="display:none">
+                    <div class="pokedex-detail-section-title">技能</div>
+                    <div class="pokedex-detail-skills" id="detail-skills"></div>
+                </div>
             </div>
         </div>
 
         <!-- 底部导航栏 -->
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="switchTab('merchant')">
-                <span class="nav-icon">🛒</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
                 <span class="nav-label">远行商人</span>
             </div>
             <div class="nav-item" onclick="switchTab('egg')">
-                <span class="nav-icon">🥚</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M12 3C8.5 3 5 8.5 5 14c0 3.31 2.69 6 6 6h2c3.31 0 6-2.69 6-6 0-5.5-3.5-11-7-11zm0 16c-2.21 0-4-1.79-4-4 0-3.87 2.56-7.43 4-8.88 1.44 1.45 4 5.01 4 8.88 0 2.21-1.79 4-4 4z"/>
+                </svg>
                 <span class="nav-label">孵蛋鉴定</span>
             </div>
             <div class="nav-item" onclick="switchTab('pokedex')">
-                <span class="nav-icon">📖</span>
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                    <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>
+                </svg>
                 <span class="nav-label">精灵图鉴</span>
             </div>
         </nav>

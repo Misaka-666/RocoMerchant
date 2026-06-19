@@ -276,13 +276,14 @@ if (document.readyState === "loading") {
     loadData();
 }
 
-// Tab 切换
+// Tab 切换 - Spring 动画增强版
 function switchTab(tab) {
     var merchantPage = document.getElementById("page-merchant");
     var eggPage = document.getElementById("page-egg");
     var pokedexPage = document.getElementById("page-pokedex");
     var navItems = document.querySelectorAll(".nav-item");
 
+    // 移除所有 active 类
     merchantPage.classList.remove("active");
     eggPage.classList.remove("active");
     pokedexPage.classList.remove("active");
@@ -291,17 +292,20 @@ function switchTab(tab) {
         navItems[i].classList.remove("active");
     }
 
-    if (tab === "merchant") {
-        merchantPage.classList.add("active");
-        navItems[0].classList.add("active");
-    } else if (tab === "egg") {
-        eggPage.classList.add("active");
-        navItems[1].classList.add("active");
-    } else if (tab === "pokedex") {
-        pokedexPage.classList.add("active");
-        navItems[2].classList.add("active");
-        initPokedex();
-    }
+    // 使用 requestAnimationFrame 确保 CSS 过渡正确触发
+    requestAnimationFrame(function() {
+        if (tab === "merchant") {
+            merchantPage.classList.add("active");
+            navItems[0].classList.add("active");
+        } else if (tab === "egg") {
+            eggPage.classList.add("active");
+            navItems[1].classList.add("active");
+        } else if (tab === "pokedex") {
+            pokedexPage.classList.add("active");
+            navItems[2].classList.add("active");
+            initPokedex();
+        }
+    });
 }
 
 // 孵蛋鉴定功能
@@ -751,7 +755,7 @@ function showPokedexDetail(index) {
         skillsSection.style.display = "none";
     }
 
-    document.getElementById("pokedex-detail").classList.remove("hidden");
+    document.getElementById("pokedex-detail").classList.add("visible");
     if (window.AndroidBridge && window.AndroidBridge.notifyDetailOpen) {
         window.AndroidBridge.notifyDetailOpen();
     }
@@ -783,7 +787,7 @@ function renderMatchupGroup(label, types, type) {
 function closePokedexDetail() {
     var detail = document.getElementById("pokedex-detail");
     if (detail) {
-        detail.classList.add("hidden");
+        detail.classList.remove("visible");
     }
     if (window.AndroidBridge && window.AndroidBridge.notifyDetailClose) {
         window.AndroidBridge.notifyDetailClose();
@@ -792,7 +796,7 @@ function closePokedexDetail() {
 
 function isDetailOpen() {
     var detail = document.getElementById("pokedex-detail");
-    if (detail && !detail.classList.contains("hidden")) {
+    if (detail && detail.classList.contains("visible")) {
         return "true";
     }
     return "false";
@@ -808,3 +812,150 @@ function isDetailOpen() {
         };
     }
 })();
+
+// ============================================
+// 动画增强功能 - Spring 动画版本
+// ============================================
+
+// 列表交错动画 - 使用 CSS 类
+function animateListItems(container, selector) {
+    var items = container.querySelectorAll(selector || '.product-card, .result-card, .history-item, .pokedex-card');
+    items.forEach(function(item, index) {
+        // 移除旧的动画类
+        item.classList.remove('animate-in');
+        // 设置交错延迟
+        item.style.animationDelay = (index * 80) + 'ms';
+        // 强制重绘以重启动画
+        void item.offsetWidth;
+        // 添加动画类
+        item.classList.add('animate-in');
+    });
+}
+
+// 数字滚动动画 - Spring 弹簧效果
+function animateNumber(element, newValue) {
+    if (!element) return;
+    
+    // 使用 CSS 动画类
+    element.style.animation = 'none';
+    element.textContent = newValue;
+    void element.offsetWidth;
+    element.style.animation = 'numberSpring 0.5s var(--ease-spring) forwards';
+}
+
+// 增强 renderProducts 函数，添加动画
+var originalRenderProducts = renderProducts;
+renderProducts = function(products) {
+    originalRenderProducts(products);
+    var container = document.getElementById("products-container");
+    if (container) {
+        setTimeout(function() {
+            animateListItems(container, '.product-card');
+        }, 50);
+    }
+};
+
+// 增强 displayEggResults 函数，添加动画
+var originalDisplayEggResults = displayEggResults;
+displayEggResults = function(results) {
+    originalDisplayEggResults(results);
+    var resultList = document.getElementById("result-list");
+    if (resultList) {
+        setTimeout(function() {
+            animateListItems(resultList, '.result-card');
+        }, 50);
+    }
+};
+
+// 增强 renderPokedex 函数，添加动画
+var originalRenderPokedex = renderPokedex;
+renderPokedex = function(data) {
+    originalRenderPokedex(data);
+    var grid = document.getElementById("pokedex-grid");
+    if (grid) {
+        setTimeout(function() {
+            animateListItems(grid, '.pokedex-card');
+        }, 50);
+    }
+};
+
+// 增强 renderHistory 函数，添加动画
+var originalRenderHistory = renderHistory;
+renderHistory = function(groups) {
+    originalRenderHistory(groups);
+    var container = document.getElementById("history-container");
+    if (container) {
+        setTimeout(function() {
+            animateListItems(container, '.history-item');
+        }, 50);
+    }
+};
+
+// 页面切换动画增强
+var originalSwitchTab = switchTab;
+switchTab = function(tab) {
+    var currentPage = document.querySelector('.page-content.active');
+    if (currentPage) {
+        currentPage.style.opacity = '0';
+        currentPage.style.transform = 'translateY(-8px)';
+    }
+    
+    setTimeout(function() {
+        originalSwitchTab(tab);
+    }, 150);
+};
+
+// 倒计时更新动画
+var lastCountdown = '';
+setInterval(function() {
+    var countdownEl = document.getElementById("countdown-pill");
+    if (countdownEl) {
+        var now = getCurrentBeijingTime();
+        var newCountdown = getCountdown(now);
+        if (newCountdown !== lastCountdown) {
+            animateNumber(countdownEl, newCountdown);
+            lastCountdown = newCountdown;
+        }
+    }
+}, 1000);
+
+// 触觉反馈（如果支持）
+function hapticFeedback(type) {
+    if (window.AndroidBridge && window.AndroidBridge.hapticFeedback) {
+        window.AndroidBridge.hapticFeedback(type || 'light');
+    }
+}
+
+// 为所有可点击元素添加触觉反馈
+document.addEventListener('click', function(e) {
+    var target = e.target.closest('[onclick], .nav-item, .type-btn, .pokedex-card, .product-card, .result-card, button');
+    if (target) {
+        hapticFeedback('light');
+    }
+});
+
+// 懒加载图片（优化性能）
+function lazyLoadImages() {
+    var images = document.querySelectorAll('img[data-src]');
+    var imageObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var img = entry.target;
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+                imageObserver.unobserve(img);
+            }
+        });
+    });
+
+    images.forEach(function(img) {
+        imageObserver.observe(img);
+    });
+}
+
+// 页面加载完成后初始化懒加载
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', lazyLoadImages);
+} else {
+    lazyLoadImages();
+}
