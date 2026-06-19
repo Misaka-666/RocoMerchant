@@ -10,14 +10,18 @@ function _nativeCallback(requestId, responseStr) {
     delete _pending[requestId];
     try {
         const resp = JSON.parse(responseStr);
+        log("Callback received, status=" + resp.status);
         if (resp.error) {
             p.reject(new Error(resp.error));
         } else if (resp.status >= 200 && resp.status < 300) {
-            p.resolve(resp.body);
+            const body = typeof resp.body === 'string' ? JSON.parse(resp.body) : resp.body;
+            log("Body parsed, keys=" + Object.keys(body).join(","));
+            p.resolve(body);
         } else {
             p.reject(new Error("HTTP " + resp.status));
         }
     } catch (e) {
+        log("Callback error: " + e.message);
         p.reject(new Error("响应解析失败"));
     }
 }
