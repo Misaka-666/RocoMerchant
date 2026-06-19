@@ -15,15 +15,21 @@ function httpGet(url, maxRedirects = 5) {
     }
 
     const doRequest = (requestUrl) => {
-      https.get(requestUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } }, (res) => {
+      const parsedUrl = new URL(requestUrl);
+      const options = {
+        hostname: parsedUrl.hostname,
+        path: parsedUrl.pathname + parsedUrl.search,
+        headers: { 'User-Agent': 'Mozilla/5.0' }
+      };
+
+      https.get(options, (res) => {
         // Follow redirects
         if (res.statusCode === 301 || res.statusCode === 302 || res.statusCode === 307 || res.statusCode === 308) {
           let redirectUrl = res.headers.location;
           if (redirectUrl) {
             // Handle relative URLs
             if (redirectUrl.startsWith('/')) {
-              const parsed = new URL(requestUrl);
-              redirectUrl = parsed.protocol + '//' + parsed.host + redirectUrl;
+              redirectUrl = parsedUrl.protocol + '//' + parsedUrl.host + redirectUrl;
             }
             console.log(`Redirect ${res.statusCode} -> ${redirectUrl}`);
             doRequest(redirectUrl);
